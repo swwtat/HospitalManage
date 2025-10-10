@@ -1,0 +1,25 @@
+<view class="picker-container">
+  <view class="picker-title">请选择就诊时间：</view>
+
+  <!-- 日期选择器 -->
+  <picker mode="date" start="{{today}}" value="{{selectedDate}}" bindchange="onDateChange">
+    <view class="picker-display">
+      <text>{{ selectedDate || '点击选择日期' }}</text>
+      <text class="arrow">▼</text>
+    </view>
+  </picker>
+
+  <!-- 时间段选择器 -->
+  <picker mode="selector" range="{{timeSlots}}" value="{{selectedTimeIndex}}" bindchange="onTimeChange">
+    <view class="picker-display">
+      <text>{{ timeSlots[selectedTimeIndex] || '点击选择时间段' }}</text>
+      <text class="arrow">▼</text>
+    </view>
+  </picker>
+
+  <view wx:if="{{selectedDate && selectedTime}}">
+    <view class="picker-result">
+      您选择了：{{ selectedDate }} {{ selectedTime }}
+    </view>
+  </view>
+</view>

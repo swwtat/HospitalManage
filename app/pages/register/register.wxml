@@ -1,0 +1,44 @@
+<!--pages/register/register.wxml-->
+<!-- <import src="../component/toast.wxml"/> -->
+
+
+<view class="container">
+  <view class="header">
+    <text>挂号</text>
+  </view>
+  <view class="deptBtn">
+  <button bindtap="goToDepartment">科室选择</button>
+  </view>
+  <view class="section">
+
+    <picker mode="selector" range="{{departments}}" disabled="true">
+      <view class="picker">{{selectedDept}}</view>
+    </picker>
+  </view>
+
+  <view class="deptBtn">
+  <button bindtap="">医生选择</button>
+  </view>
+  <view class="section">
+    <picker mode="selector" range="{{doctors}}" bindchange="onDoctorChange">
+      <view class="picker">{{selectedDoctor}}</view>
+    </picker>
+  </view>
+
+  <view class="deptBtn">
+  <button bindtap="">号别选择</button>
+  </view>
+  <view class="section">
+    <picker mode="selector" range="{{registerRange}}" bindchange="onRegiChange">
+      <view class="picker">{{selectedRegi}}</view>
+    </picker>
+  </view>
+
+
+  <register-date-picker bind:timeSelected="onTimeSelected" />
+
+
+  <button class="register-btn" bindtap="register">立即挂号</button>
+
+  <view wx:if="{{message}}" class="message">{{message}}</view>
+</view>
