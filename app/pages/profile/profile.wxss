@@ -71,12 +71,12 @@
 
 /* 单个功能卡片 */
 .card {
-  width: 42%;
-  height: 180rpx;
-  background: linear-gradient(135deg, #6fc1ff, #5b9df9);
+  width: 90%;
+  height: 140rpx;
+  background: linear-gradient(135deg, #ecf7ff, #81a1d1);
   border-radius: 24rpx;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   box-shadow: 0 8rpx 18rpx rgba(0, 0, 0, 0.08);
@@ -119,4 +119,5 @@
   font-weight: 600;
   letter-spacing: 1rpx;
   z-index: 1;
+  color: #222222;
 }

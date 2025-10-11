@@ -1,66 +1,52 @@
-// pages/info/info.js
+// pages/profileForm/profileForm.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    role: 'student', // 默认学生
+    genderOptions: ['男', '女'],
+    gender: '',
+    idNumber: '',
+    idCard: '',
+    history: ''
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  switchToStudent() {
+    this.setData({ role: 'student' });
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  switchToTeacher() {
+    this.setData({ role: 'teacher' });
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  onIDInput(e) {
+    this.setData({ idNumber: e.detail.value });
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  onIDCardInput(e) {
+    this.setData({ idCard: e.detail.value });
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
+  onGenderChange(e) {
+    this.setData({ gender: this.data.genderOptions[e.detail.value] });
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
+  onHistoryInput(e) {
+    this.setData({ history: e.detail.value });
   },
 
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+  onSubmit() {
+    const { idNumber, idCard, gender } = this.data;
+    if (!idNumber || !idCard || !gender) {
+      wx.showToast({
+        title: '请填写完整信息',
+        icon: 'none'
+      });
+      return;
+    }
+    wx.showLoading({ title: '保存中...' });
+    setTimeout(() => {
+      wx.hideLoading();
+      wx.showToast({ title: '保存成功', icon: 'success' });
+      wx.navigateBack();
+    }, 1000);
   }
-})
+});
