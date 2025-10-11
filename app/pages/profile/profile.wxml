@@ -1,9 +1,9 @@
 <!--pages/profile/profile.wxml-->
 <view class="container">
-  <view class="profile-card">
+  <view class="profile-card" bindtap = "onClick" data-action="用户登录">
     <image class="avatar" src="../../assets/avatar.png"></image>
-    <text class="username">用户昵称</text>
-    <text class="userid">ID: 123456</text>
+    <text class="username">请登录</text>
+    <text class="userid">登陆后可使用正常功能</text>
   </view>
   <view class="card-grid">
     <view class="card" bindtap="onClick" data-action="个人信息">

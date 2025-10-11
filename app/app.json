@@ -3,17 +3,19 @@
     "pages/index/index",
     "pages/profile/profile",
     "pages/register/register",
-    "pages/deptPick/deptPick"
+    "pages/deptPick/deptPick",
+    "pages/login/login",
+    "pages/info/info"
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#FF3838",
+    "navigationBarBackgroundColor": "#6fc1ff",
     "navigationBarTitleText": "校医院小程序",
     "navigationBarTextStyle": "white"
   },
   "tabBar": {
     "color": "#8a8a8a",
-    "selectedColor": "#FF3838",
+    "selectedColor": "#6fc1ff",
     "backgroundColor": "#ffffff",
     "borderStyle": "black",
     "list": [

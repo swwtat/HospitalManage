@@ -1,44 +1,52 @@
-<!--pages/register/register.wxml-->
-<!-- <import src="../component/toast.wxml"/> -->
-
-
 <view class="container">
+  <!-- 页面标题 -->
   <view class="header">
-    <text>挂号</text>
-  </view>
-  <view class="deptBtn">
-  <button bindtap="goToDepartment">科室选择</button>
-  </view>
-  <view class="section">
-
-    <picker mode="selector" range="{{departments}}" disabled="true">
-      <view class="picker">{{selectedDept}}</view>
-    </picker>
+    <text class="main-title">智能挂号服务</text>
+    <text class="sub-title">一步完成您的就诊预约</text>
   </view>
 
-  <view class="deptBtn">
-  <button bindtap="">医生选择</button>
-  </view>
-  <view class="section">
-    <picker mode="selector" range="{{doctors}}" bindchange="onDoctorChange">
-      <view class="picker">{{selectedDoctor}}</view>
-    </picker>
-  </view>
-
-  <view class="deptBtn">
-  <button bindtap="">号别选择</button>
-  </view>
-  <view class="section">
-    <picker mode="selector" range="{{registerRange}}" bindchange="onRegiChange">
-      <view class="picker">{{selectedRegi}}</view>
-    </picker>
+  <!-- 科室选择卡片 -->
+  <view class="card">
+    <text class="card-title">科室选择</text>
+    <view class="card-content">
+      <button class="action-btn" bindtap="goToDepartment">选择科室</button>
+      <picker mode="selector" range="{{departments}}" bindchange="onDeptChange" disabled="{{false}}">
+        <view class="picker-display">{{selectedDept || '请选择科室'}}</view>
+      </picker>
+    </view>
   </view>
 
+  <!-- 医生选择卡片 -->
+  <view class="card">
+    <text class="card-title">医生选择</text>
+    <view class="card-content">
+      <picker mode="selector" range="{{doctors}}" bindchange="onDoctorChange">
+        <view class="picker-display">{{selectedDoctor || '请选择医生'}}</view>
+      </picker>
+    </view>
+  </view>
 
-  <register-date-picker bind:timeSelected="onTimeSelected" />
+  <!-- 号别选择卡片 -->
+  <view class="card">
+    <text class="card-title">号别选择</text>
+    <view class="card-content">
+      <picker mode="selector" range="{{registerRange}}" bindchange="onRegiChange">
+        <view class="picker-display">{{selectedRegi || '请选择号别'}}</view>
+      </picker>
+    </view>
+  </view>
 
+  <!-- 日期与时间选择 -->
+  <view class="card">
+    <text class="card-title">就诊日期与时间</text>
+    <view class="card-content">
+      <register-date-picker bind:timeSelected="onTimeSelected" />
+    </view>
+  </view>
 
+  <!-- 挂号按钮 -->
   <button class="register-btn" bindtap="register">立即挂号</button>
 
+  <!-- 消息提示 -->
   <view wx:if="{{message}}" class="message">{{message}}</view>
 </view>

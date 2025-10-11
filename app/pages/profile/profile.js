@@ -8,9 +8,33 @@ Page({
 
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
+  onClick: function(e) {
+    const action = e.currentTarget.dataset.action;
+    // 根据 action 跳转不同页面
+    let url = '';
+    switch(action) {
+      case '用户登录':
+        url = '/pages/login/login';
+        break;
+      case '个人信息':
+        url = '/pages/info/info';
+        break;
+      case '历史查询':
+        url = '/pages/appointment/appointment';
+        break;
+      case '我的订单':
+        url = '/pages/health/health';
+      
+        break;
+      default:
+        wx.showToast({
+          title: '功能未定义',
+          icon: 'none'
+        });
+        return;
+    }
+    wx.navigateTo({ url });
+  },
   onLoad(options) {
 
   },
