@@ -1,0 +1,32 @@
+<!--pages/docPick/docPick.wxml-->
+<view class="container">
+  <view class="header">
+    <input class="search-input" placeholder="搜索医生…" bindinput="onSearchInput" />
+  </view>
+
+  <view class="menu">
+    <!-- 左侧主科室 -->
+    <scroll-view class="left-menu" scroll-y>
+      <block wx:for="{{filteredDoctors}}" wx:key="name">
+        <view 
+          class="menu-item {{selectedDoc === index ? 'active' : ''}}" 
+          bindtap="onSelectDoc" 
+          data-index="{{index}}">
+          {{item.name}}
+        </view>
+      </block>
+    </scroll-view>
+
+    <!-- 右侧子科室 -->
+    <scroll-view class="right-menu" scroll-y>
+      <block wx:for="{{filteredDoctors[selectedDoc].subs}}" wx:key="sub">
+        <view 
+          class="submenu-item" 
+          bindtap="onSelectSub" 
+          data-sub="{{item}}">
+          {{item}}
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+</view>

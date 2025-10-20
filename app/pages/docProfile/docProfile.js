@@ -6,6 +6,9 @@ Page({
    */
   data: {
 
+    filteredDoctors: [],
+    selectedDept: '请选择科室',
+    selectedDoc: '请选择医生',
   },
 
   /**
@@ -14,10 +17,16 @@ Page({
   onLoad(options) {
 
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
+  goToDepartment() {
+    wx.navigateTo({
+      url: '/pages/deptPick/deptPick'
+    });
+  },
+  goToDocs() {
+    wx.navigateTo({
+      url: '/pages/docPick/docPick'
+    });
+  },
   onReady() {
 
   },
@@ -26,9 +35,27 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
+    const selected = wx.getStorageSync('selectedDepartment');
+    if (selected) {
+      this.setData({
+        selectedDept: selected,
+      });
+      wx.removeStorageSync('selectedDepartment'); // 用完后清除缓存
+    }
+    const selectedDocs = wx.getStorageSync('selectedDoc');
+    if (selectedDocs) {
+      this.setData({
+        selectedDoc: selectedDocs
+      });
+      wx.removeStorageSync('selectedDoc'); // 用完后清除缓存
+    }
+  },
+  onDeptChange: function(e) {
+
+  },  
+  onDocChange: function(e) {
 
   },
-
   /**
    * 生命周期函数--监听页面隐藏
    */
