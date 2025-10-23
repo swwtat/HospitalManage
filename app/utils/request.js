@@ -1,5 +1,5 @@
 // utils/request.js
-const BASE_URL = "http://192.168.10.216:3000"; // 修改为你的后端地址
+const BASE_URL = "http://localhost:3000"; // 修改为你的后端地址
 
 const request = (options) => {
   return new Promise((resolve, reject) => {
