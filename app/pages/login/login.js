@@ -7,7 +7,6 @@ Page({
   },
 
   onRegister() {
-    console.log("asdasdasd");
     wx.navigateTo({
       url: '/pages/accountRegister/accountRegister',
     })
