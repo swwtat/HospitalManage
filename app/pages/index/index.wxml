@@ -1,6 +1,7 @@
 <!--index.wxml-->
   <!-- 卡片按钮区 -->
   <view class="container">
+    
     <!-- 头图 -->
     <image src="../../assets/header.jpg" class="header-image" mode="aspectFill"></image>
   

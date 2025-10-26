@@ -8,7 +8,8 @@
     "pages/info/info",
     "pages/docProfile/docProfile",
     "pages/docPick/docPick",
-    "pages/accountRegister/accountRegister"
+    "pages/accountRegister/accountRegister",
+    "pages/setting/setting"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -15,6 +15,7 @@ const AuthService = {
 
     const hash = await bcrypt.hash(password, 10);
     const userId = await AccountModel.create(username, hash);
+    console.log('New user registered with ID:', userId);
     return { id: userId, username };
   },
 

@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const registrationRoutes = require('./routes/registration');
 const authRoutes = require('./routes/authRoutes');
+const patientRoutes = require('./routes/patient');
+const doctorRoutes = require('./routes/doctor');
 
 const app = express();
 
@@ -12,6 +14,8 @@ app.use(bodyParser.json());
 
 app.use('/api/registration', registrationRoutes);
 app.use('/auth', authRoutes);
+app.use('/api/patient', patientRoutes);
+app.use('/api/doctor', doctorRoutes);
 
 // 可选：在开发环境中运行 ensure_db（检测表并导入 init.sql）
 if (process.env.ENSURE_DB === 'true') {

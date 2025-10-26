@@ -22,6 +22,7 @@ Page({
 
   async onLogin() {
     const { username, password } = this.data;
+    wx.setStorageSync('account_name',username);
     if (!username || !password) {
       wx.showToast({ title: '请输入用户名和密码', icon: 'none' });
       return;
@@ -38,12 +39,16 @@ Page({
 
       wx.hideLoading();
 
-      if (res.success) {
+      if (res && res.success) {
         wx.showToast({ title: '登录成功', icon: 'success' });
-        wx.setStorageSync('token', res.token);
-        wx.redirectTo({ url: '/pages/home/home' });
+        const token = res.data && res.data.token;
+        if (token) wx.setStorageSync('token', token);
+        // 可存储 user id / role
+        if (res.data && res.data.id) wx.setStorageSync('account_id', res.data.id);
+        setTimeout(() => wx.navigateBack(), 800);
       } else {
-        wx.showToast({ title: res.message || '登录失败', icon: 'none' });
+        wx.showToast({ title: res && res.message ? res.message : '登录失败', icon: 'none' });
+        wx.removeStorageSync('account_name');
       }
 
     } catch (error) {

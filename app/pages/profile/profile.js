@@ -1,31 +1,48 @@
 // pages/profile/profile.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    id_top:'',
+    logged:'',
   },
 
   onClick: function(e) {
     const action = e.currentTarget.dataset.action;
     // 根据 action 跳转不同页面
     let url = '';
+    
     switch(action) {
       case '用户登录':
-        url = '/pages/login/login';
+        if (!wx.getStorageSync('account_id')) {
+          url = '/pages/login/login';
+        } else {
+          url = '/pages/setting/setting'; 
+        }
         break;
+        
       case '个人信息':
+        if (!this.logged) {
+          this.showLoginPrompt();
+          return;
+        }
         url = '/pages/info/info';
         break;
+        
       case '历史查询':
+        if (!this.logged) {
+          this.showLoginPrompt();
+          return;
+        }
         url = '/pages/appointment/appointment';
         break;
+        
       case '我的订单':
+        if (!this.logged) {
+          this.showLoginPrompt();
+          return;
+        }
         url = '/pages/health/health';
-      
         break;
+        
       default:
         wx.showToast({
           title: '功能未定义',
@@ -33,12 +50,31 @@ Page({
         });
         return;
     }
+    
     wx.navigateTo({ url });
   },
-  onLoad(options) {
-
+  
+  showLoginPrompt: function() {
+    wx.showModal({
+      title: '提示',
+      content: '请先登录',
+      confirmText: '去登录',
+      success: (res) => {
+        if (res.confirm) {
+          wx.navigateTo({
+            url: '/pages/login/login'
+          });
+        }
+      }
+    });
   },
 
+  onLoad(options) {
+    this.setData({logged:wx.getStorageSync('account_id')});
+    
+  },
+
+ 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -50,7 +86,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    setTimeout(() => this.setData({id_top:wx.getStorageSync('account_name')}), 400);
   },
 
   /**

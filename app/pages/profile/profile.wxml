@@ -2,8 +2,8 @@
 <view class="container">
   <view class="profile-card" bindtap = "onClick" data-action="用户登录">
     <image class="avatar" src="../../assets/avatar.png"></image>
-    <text class="username">请登录</text>
-    <text class="userid">登陆后可使用正常功能</text>
+    <text class="username">{{id_top||'请登录'}}</text>
+    <view wx:if="{{id_top}}">进入个人账号管理页</view><view wx:else>登陆后可使用正常功能</view>
   </view>
   <view class="card-grid">
     <view class="card" bindtap="onClick" data-action="个人信息">

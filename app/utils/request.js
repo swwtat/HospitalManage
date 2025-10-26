@@ -7,11 +7,15 @@ const BASE_URL = (typeof __wxConfigBaseUrl !== 'undefined') ? __wxConfigBaseUrl 
  */
 const request = (options) => {
   return new Promise((resolve, reject) => {
+    // 自动附带 token（若有）
+    const token = wx.getStorageSync('token');
+    const defaultHeaders = { 'Content-Type': 'application/json' };
+    if (token) defaultHeaders['Authorization'] = `Bearer ${token}`;
     wx.request({
       url: BASE_URL + options.url,
       method: options.method || 'GET',
       data: options.data || {},
-      header: Object.assign({ 'Content-Type': 'application/json' }, options.headers || {}),
+      header: Object.assign(defaultHeaders, options.headers || {}),
       success(res) {
         if (res && (res.statusCode === 200 || res.statusCode === 201)) {
           // 约定后端返回 { success: boolean, data?, message? }
