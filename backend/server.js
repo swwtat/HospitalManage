@@ -5,6 +5,9 @@ const registrationRoutes = require('./routes/registration');
 const authRoutes = require('./routes/authRoutes');
 const patientRoutes = require('./routes/patient');
 const doctorRoutes = require('./routes/doctor');
+const mqRoutes = require('./routes/mq');
+const mq = require('./mq');
+const orderSubscriber = require('./mq/subscriber');
 
 const app = express();
 
@@ -16,6 +19,7 @@ app.use('/api/registration', registrationRoutes);
 app.use('/auth', authRoutes);
 app.use('/api/patient', patientRoutes);
 app.use('/api/doctor', doctorRoutes);
+app.use('/api/mq', mqRoutes);
 
 // 可选：在开发环境中运行 ensure_db（检测表并导入 init.sql）
 if (process.env.ENSURE_DB === 'true') {
@@ -40,6 +44,37 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 3000;
 const ip = '0.0.0.0';
-app.listen(port, ip, () => {
-  console.log(`The Server running on http://${ip}:${port}`);
-});
+
+// 启动过程：优先初始化 MQ 连接并注册基础订阅，然后启动 HTTP 服务
+(async () => {
+  try {
+    await mq.connect();
+
+    // 注册一个通用的订单事件订阅（示例：只是打印并为后续扩展预留挂钩）
+    try {
+      await orderSubscriber.registerOrderSubscriber('order.#', async (body, meta) => {
+        console.log('Received MQ event', meta.routingKey, body);
+        // TODO: 根据 routingKey 分发到不同服务（通知、审计、统计等）
+        // 示例占位：如果是 order.cancelled，可以触发历史记录或通知
+      });
+      console.log('Order subscriber registered for order.#');
+    } catch (subErr) {
+      console.warn('Failed to register order subscriber', subErr.message);
+    }
+
+    // 初始化示例消费者：通知服务（写入 notifications 表）
+    try {
+      const notificationConsumer = require('./consumers/notificationConsumer');
+      await notificationConsumer.init();
+    } catch (ncErr) {
+      console.warn('Failed to init notification consumer', ncErr.message);
+    }
+
+    app.listen(port, ip, () => {
+      console.log(`The Server running on http://${ip}:${port}`);
+    });
+  } catch (err) {
+    console.error('Failed to initialize MQ or start server', err);
+    process.exit(1);
+  }
+})();

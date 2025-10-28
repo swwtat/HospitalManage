@@ -1,4 +1,5 @@
 const db = require('../db');
+const mqPublisher = require('../mq/publisher');
 
 /**
  * 尝试为用户创建挂号（订单）
@@ -47,8 +48,10 @@ async function createRegistration(payload) {
       );
 
       const [orderRows] = await conn.query('SELECT * FROM orders WHERE id = ?', [r.insertId]);
-      await conn.commit();
-      return orderRows[0];
+  await conn.commit();
+  // 发布 MQ 事件：order.created (confirmed)
+  try { await mqPublisher.publishOrderEvent('created', orderRows[0]); } catch (e) { console.warn('MQ publish failed', e.message); }
+  return orderRows[0];
     } else {
       // 已满，加入候补
       is_waitlist = true;
@@ -57,8 +60,10 @@ async function createRegistration(payload) {
         [account_id, department_id, doctor_id, availability ? availability.id : null, date, slot, 'waiting', true, note || null]
       );
       const [orderRows] = await conn.query('SELECT * FROM orders WHERE id = ?', [r.insertId]);
-      await conn.commit();
-      return orderRows[0];
+  await conn.commit();
+  // 发布 MQ 事件：order.waiting
+  try { await mqPublisher.publishOrderEvent('waiting', orderRows[0]); } catch (e) { console.warn('MQ publish failed', e.message); }
+  return orderRows[0];
     }
   } catch (err) {
     await conn.rollback();
@@ -106,12 +111,19 @@ async function cancelRegistration(orderId, cancelledBy) {
           // 将其设为 confirmed，并 booked++
           await conn.query('UPDATE orders SET status = ?, is_waitlist = 0, updated_at = CURRENT_TIMESTAMP WHERE id = ?', ['confirmed', next.id]);
           await conn.query('UPDATE doctor_availability SET booked = ? WHERE id = ?', [avail.booked, avail.id]);
+          // 获取已提升的订单详情并发布 promoted 事件
+          const [promotedRows] = await conn.query('SELECT * FROM orders WHERE id = ?', [next.id]);
+          const promotedOrder = promotedRows[0];
+          try { await mqPublisher.publishOrderEvent('promoted', promotedOrder); } catch (e) { console.warn('MQ publish failed', e.message); }
         }
       }
     }
 
-    await conn.commit();
-    return { success: true };
+  await conn.commit();
+  // 发布取消事件
+  try { await mqPublisher.publishOrderEvent('cancelled', { orderId, cancelledBy }); } catch (e) { console.warn('MQ publish failed', e.message); }
+
+  return { success: true };
   } catch (err) {
     await conn.rollback();
     throw err;

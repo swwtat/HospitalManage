@@ -6,12 +6,15 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: production
+      # 指向 RabbitMQ 服务（在同一 compose 网络下，服务名为 rabbitmq）
+      MQ_URL: amqp://guest:guest@rabbitmq:5672
       DB_HOST: db
       DB_USER: root
       DB_PASSWORD: 123456
       DB_NAME: hospital
     depends_on:
       - db
+      - rabbitmq
     volumes: 
      # - ./backend:/usr/src/app
       - /usr/src/app/node_modules
@@ -28,5 +31,18 @@ services:
       - mysql-data:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d:ro
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: hospital-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
 volumes:
   mysql-data:
+  rabbitmq-data:
