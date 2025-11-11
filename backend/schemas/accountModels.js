@@ -13,6 +13,14 @@ const AccountModel = {
     const [rows] = await db.execute('SELECT * FROM accounts WHERE username = ?', [username]);
     return rows[0];
   }
+  ,
+  async findById(id) {
+    const [rows] = await db.execute('SELECT * FROM accounts WHERE id = ?', [id]);
+    return rows[0];
+  },
+  async updatePassword(accountId, passwordHash) {
+    await db.execute('UPDATE accounts SET password_hash = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?', [passwordHash, accountId]);
+  }
 };
 
 module.exports = AccountModel;

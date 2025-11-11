@@ -1,0 +1,31 @@
+<!-- pages/docShift/docShift.wxml -->
+<view class="container">
+	<view class="controls">
+		<picker mode="date" value="{{date}}" bindchange="onDateChange">
+			<view class="picker">选择日期：{{date}}</view>
+		</picker>
+		<button bindtap="loadAvailability">刷新</button>
+	</view>
+
+	<view class="new">
+		<view>新增/修改排班</view>
+		<picker mode="selector" range="{{slots}}" bindchange="onSlotChange">
+			<view>时段：{{selectedSlotLabel}}</view>
+		</picker>
+		<input placeholder="容量" type="number" value="{{capacity}}" bindinput="onCapacityChange" />
+		<button bindtap="createAvailability">保存排班</button>
+	</view>
+
+	<view class="list">
+		<block wx:for="{{availability}}" wx:key="id">
+			<view class="item" bindtap="onEdit" data-id="{{item.id}}">
+				<text>ID: {{item.id}} - 日期: {{item.date}} - 时段: {{item.slot}} - 容量: {{item.capacity}} - 已约: {{item.booked}}</text>
+				<view class="actions">
+					<button bindtap="onDelete" data-id="{{item.id}}">删除</button>
+					<button bindtap="onEdit" data-id="{{item.id}}">编辑</button>
+				</view>
+			</view>
+		</block>
+		<view wx:if="{{!availability || availability.length === 0}}">暂无排班</view>
+	</view>
+</view>

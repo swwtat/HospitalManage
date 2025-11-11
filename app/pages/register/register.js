@@ -34,20 +34,25 @@ Page({
       selectedRegi: regi,
     });
   },
-  onDateSelected(e) {
-    const { date } = e.detail
-    console.log('用户选择的挂号日期:', date)
-    wx.showToast({
-      title: `已选择：${date}`,
-      icon: 'success'
-    })
-    // 根据已选医生查询该医生该日期的可用排班
-    const doctor = this.data.selectedDoctor;
-    if (doctor && doctor.id) {
-      this.loadAvailability(doctor.id, date);
+  // handle timeSelected event from register-date-picker component
+  onTimeSelected(e) {
+    const { date, time } = e.detail || {};
+    if (date) {
+      wx.showToast({ title: `已选择：${date}` });
+      // map time label to internal slot enum used by backend
+      const map = {
+        '上午 08:00-12:00': '8-10',
+        '下午 13:00-17:00': '14-16',
+        '晚上 18:00-21:00': '16-18'
+      };
+      const slot = map[time] || null;
+      this.setData({ selectedDate: date, selectedSlot: slot });
+      wx.setStorageSync('selectedDate', date);
+      wx.setStorageSync('selectedSlot', slot);
+      // load availability for this doctor/date
+      const doctor = this.data.selectedDoctor;
+      if (doctor && doctor.id) this.loadAvailability(doctor.id, date);
     }
-    // 缓存选择的日期
-    wx.setStorageSync('selectedDate', date);
   },
   onDoctorSelected(e) {
     const { doctor } = e.detail;
@@ -125,8 +130,9 @@ Page({
       account_id,
       department_id: (this.data.selectedDept && this.data.selectedDept.id) ? this.data.selectedDept.id : null,
       doctor_id: (this.data.selectedDoctor && this.data.selectedDoctor.id) ? this.data.selectedDoctor.id : null,
-      date: wx.getStorageSync('selectedDate') || null,
-      slot: this.data.selectedRegi || null,
+      date: this.data.selectedDate || wx.getStorageSync('selectedDate') || null,
+      // slot should be a time-slot enum (e.g. '8-10'), choose selectedSlot (from date picker) first
+      slot: this.data.selectedSlot || wx.getStorageSync('selectedSlot') || null,
       note: ''
     };
 

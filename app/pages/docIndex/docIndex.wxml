@@ -1,0 +1,9 @@
+<view class="container">
+	<view class="card">
+		<text class="title">医生工作台</text>
+		<button bindtap="goAccount">密码管理</button>
+		<button bindtap="goRegister">查看挂号单</button>
+		<button bindtap="goShift">修改排班</button>
+		<button bindtap="onLogout">退出登录</button>
+	</view>
+</view>

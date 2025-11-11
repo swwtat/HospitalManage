@@ -23,6 +23,72 @@ exports.get = async (req, res) => {
   }
 };
 
+exports.getMyDoctor = async (req, res) => {
+  try {
+    const accountId = req.user && req.user.id;
+    if (!accountId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+    const [rows] = await require('../db').query('SELECT * FROM doctors WHERE account_id = ?', [accountId]);
+    if (!rows || rows.length === 0) return res.status(404).json({ success: false, message: '医生未绑定账户' });
+    res.json({ success: true, data: rows[0] });
+  } catch (err) { console.error(err); res.status(500).json({ success: false, message: err.message }); }
+};
+
+exports.getRegistrationsForMe = async (req, res) => {
+  try {
+    const accountId = req.user && req.user.id;
+    if (!accountId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+    const date = req.query.date;
+    const db = require('../db');
+    // find doctor id
+    const [docs] = await db.query('SELECT * FROM doctors WHERE account_id = ?', [accountId]);
+    if (!docs || docs.length === 0) return res.status(404).json({ success: false, message: '医生未绑定账户' });
+    const doctorId = docs[0].id;
+    // join accounts/profiles to show patient info in the doctor view
+    let q = `SELECT o.*, a.username as account_username, p.display_name as patient_name, p.phone as patient_phone
+             FROM orders o
+             LEFT JOIN accounts a ON o.account_id = a.id
+             LEFT JOIN profiles p ON p.account_id = a.id
+             WHERE o.doctor_id = ?`;
+    const params = [doctorId];
+    if (date) { q += ' AND o.date = ?'; params.push(date); }
+    q += ' ORDER BY o.created_at DESC';
+    const [rows] = await db.query(q, params);
+    res.json({ success: true, data: rows });
+  } catch (err) { console.error(err); res.status(500).json({ success: false, message: err.message }); }
+};
+
+// allow doctor to manage their own availability (create/update)
+exports.upsertAvailabilityForMe = async (req, res) => {
+  try {
+    const accountId = req.user && req.user.id;
+    if (!accountId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+    const db = require('../db');
+    const [docs] = await db.query('SELECT * FROM doctors WHERE account_id = ?', [accountId]);
+    if (!docs || docs.length === 0) return res.status(404).json({ success: false, message: '医生未绑定账户' });
+    const doctorId = docs[0].id;
+    const payload = Object.assign({}, req.body, { doctor_id: doctorId });
+    const row = await require('../services/adminService').createOrUpdateAvailability(payload);
+    res.json({ success: true, data: row });
+  } catch (err) { console.error(err); res.status(500).json({ success: false, message: err.message }); }
+};
+
+exports.deleteAvailabilityForMe = async (req, res) => {
+  try {
+    const accountId = req.user && req.user.id;
+    if (!accountId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+    const db = require('../db');
+    const [docs] = await db.query('SELECT * FROM doctors WHERE account_id = ?', [accountId]);
+    if (!docs || docs.length === 0) return res.status(404).json({ success: false, message: '医生未绑定账户' });
+    const doctorId = docs[0].id;
+    const id = req.params.id;
+    // confirm the availability belongs to this doctor
+    const [rows] = await db.query('SELECT * FROM doctor_availability WHERE id = ? AND doctor_id = ?', [id, doctorId]);
+    if (!rows || rows.length === 0) return res.status(404).json({ success: false, message: '排班未找到或无权限' });
+    await require('../services/adminService').deleteAvailability(id);
+    res.json({ success: true });
+  } catch (err) { console.error(err); res.status(500).json({ success: false, message: err.message }); }
+};
+
 exports.list = async (req, res) => {
   try {
     const filters = {};

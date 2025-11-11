@@ -1,0 +1,10 @@
+<!--pages/docAccount/docAccount.wxml-->
+<view class="container">
+	<view class="card">
+		<text class="title">密码管理</text>
+		<input placeholder="旧密码" password="true" bindinput="onOld" />
+		<input placeholder="新密码" password="true" bindinput="onNew" />
+		<button bindtap="onChange">修改密码</button>
+		<view>{{message}}</view>
+	</view>
+</view>

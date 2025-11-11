@@ -9,7 +9,12 @@
     "pages/docProfile/docProfile",
     "pages/docPick/docPick",
     "pages/accountRegister/accountRegister",
-    "pages/setting/setting"
+    "pages/setting/setting",
+    "pages/docLogin/docLogin",
+    "pages/docRegister/docRegister",
+    "pages/docAccount/docAccount",
+    "pages/docIndex/docIndex",
+    "pages/docShift/docShift"
   ],
   "window": {
     "backgroundTextStyle": "light",

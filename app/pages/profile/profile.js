@@ -34,13 +34,17 @@ Page({
         url = '/pages/appointment/appointment';
         break;
 
-      case '我的订单':
+      case '我的预约':
         if (!this.data.logged) {
           this.showLoginPrompt();
           return;
         }
         url = '/pages/health/health';
         break;
+
+        case '医生登录':
+          url = '/pages/docLogin/docLogin';
+          break;
 
       default:
         wx.showToast({

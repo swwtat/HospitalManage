@@ -25,3 +25,17 @@ const AuthController = {
 };
 
 module.exports = AuthController;
+
+AuthController.changePassword = async (req, res) => {
+  try {
+    const userId = req.user && req.user.id;
+    if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+    const { oldPassword, newPassword } = req.body || {};
+    if (!oldPassword || !newPassword) return res.status(400).json({ success: false, message: '需要 oldPassword 与 newPassword' });
+    await AuthService.changePassword(userId, oldPassword, newPassword);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('changePassword error', err.message);
+    res.status(400).json({ success: false, message: err.message });
+  }
+};

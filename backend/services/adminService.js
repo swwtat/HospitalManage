@@ -1,4 +1,6 @@
 const db = require('../db');
+const bcrypt = require('bcryptjs');
+const AccountModel = require('../schemas/accountModels');
 
 async function ensureTables() {
   // fees, doctor_profile_reviews, doctor_leaves
@@ -77,6 +79,27 @@ async function updateDoctor(id, payload) {
 
 async function deleteDoctor(id) {
   await db.query('DELETE FROM doctors WHERE id = ?', [id]);
+}
+
+async function setDoctorPassword(doctorId, { username, password }) {
+  // find doctor
+  const [rows] = await db.query('SELECT * FROM doctors WHERE id = ?', [doctorId]);
+  if (rows.length === 0) throw new Error('Doctor not found');
+  const doc = rows[0];
+  // if doctor has account_id, update that account; otherwise create a new account and link it
+  if (doc.account_id) {
+    const hash = await bcrypt.hash(password, 10);
+    await AccountModel.updatePassword(doc.account_id, hash);
+    return { account_id: doc.account_id };
+  } else {
+    // create username if not provided
+    const uname = username || `doctor${doctorId}`;
+    const hash = await bcrypt.hash(password, 10);
+    const accountId = await AccountModel.create(uname, hash, 'doctor');
+    // link doctor to account
+    await db.query('UPDATE doctors SET account_id = ? WHERE id = ?', [accountId, doctorId]);
+    return { account_id: accountId, username: uname };
+  }
 }
 
 // Availability
@@ -159,6 +182,7 @@ module.exports = {
   ensureTables,
   listDepartments, createDepartment, updateDepartment, deleteDepartment,
   listDoctors, createDoctor, updateDoctor, deleteDoctor,
+  setDoctorPassword,
   getAvailabilityByDoctor, listAllAvailability, deleteAvailability, createOrUpdateAvailability,
   listFees, setFee,
   listPendingDoctorReviews, approveDoctorProfile, rejectDoctorProfile,

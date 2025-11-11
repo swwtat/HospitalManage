@@ -15,13 +15,13 @@
       <image class="card-icon" src="../../assets/search.png"></image>
       <text class="card-text">历史查询</text>
     </view>
-    <view class="card" bindtap="onClick" data-action="预约">
+    <view class="card" bindtap="onClick" data-action="我的预约">
       <image class="card-icon" src="../../assets/appointment.png"></image>
-      <text class="card-text">预约</text>
+      <text class="card-text">我的预约</text>
     </view>
-    <view class="card" bindtap="onClick" data-action="健康档案">
+    <view class="card" bindtap="onClick" data-action="医生登录">
       <image class="card-icon" src="../../assets/health.png"></image>
-      <text class="card-text">健康档案</text>
+      <text class="card-text">医生登录</text>
     </view>
   </view>
 </view>

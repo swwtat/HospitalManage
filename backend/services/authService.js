@@ -40,6 +40,16 @@ const AuthService = {
 
     return { success: true, data: { token, role: user.role, id: user.id } };
   }
+  ,
+  async changePassword(userId, oldPassword, newPassword) {
+    const user = await AccountModel.findById(userId);
+    if (!user) throw new Error('用户不存在');
+    const valid = await bcrypt.compare(oldPassword, user.password_hash);
+    if (!valid) throw new Error('旧密码不正确');
+    const hash = await bcrypt.hash(newPassword, 10);
+    await AccountModel.updatePassword(userId, hash);
+    return true;
+  }
 };
 
 module.exports = AuthService;

@@ -1,0 +1,106 @@
+/* pages/docLogin/docLogin.wxss */
+
+/* 页面整体背景 */
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f3f9ff 0%, #e8f0fc 100%);
+  padding: 40rpx 28rpx;
+  box-sizing: border-box;
+}
+
+/* 登录卡片 */
+.card {
+  width: 680rpx;
+  max-width: 92%;
+  background: #ffffff;
+  border-radius: 28rpx;
+  padding: 48rpx 38rpx 40rpx;
+  box-sizing: border-box;
+  box-shadow: 0 12rpx 40rpx rgba(0, 90, 200, 0.08);
+  border: 1rpx solid rgba(0, 0, 0, 0.04);
+  text-align: center;
+  animation: fadeIn 0.5s ease both;
+}
+
+/* 动画淡入效果 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 标题文字 */
+.title {
+  font-size: 38rpx;
+  font-weight: 700;
+  color: #0f2e5a;
+  letter-spacing: 1rpx;
+  margin-bottom: 40rpx;
+  text-align: center;
+}
+
+/* 输入框样式 */
+input {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  padding: 0 30rpx;
+  margin-bottom: 28rpx;
+  font-size: 30rpx;
+  color: #1b2b44;
+  background: #f9fcff;
+  border: 1rpx solid #dce8f6;
+  border-radius: 16rpx;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+/* 输入框聚焦 */
+input:focus {
+  border-color: #4f9efc;
+  box-shadow: 0 6rpx 20rpx rgba(79, 158, 252, 0.15);
+}
+
+/* 输入框 placeholder */
+input::placeholder {
+  color: #9fb3c8;
+}
+
+/* 登录按钮 */
+button {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  border: none;
+  border-radius: 18rpx;
+  background-image: linear-gradient(90deg, #4f9efc 0%, #6bd3ff 100%);
+  box-shadow: 0 16rpx 30rpx rgba(79, 158, 252, 0.25);
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 1rpx;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+/* 点击时的轻微下压 */
+button:active {
+  transform: translateY(3rpx);
+  box-shadow: 0 8rpx 16rpx rgba(79, 158, 252, 0.2);
+}
+
+/* 消息提示 */
+.card view {
+  margin-top: 26rpx;
+  font-size: 26rpx;
+  color: #ff4d4f; /* 默认错误提示红色，可动态修改为成功色 */
+}
+
+/* 响应式适配 */
+@media (max-width: 340px) {
+  .card { padding: 30rpx; border-radius: 20rpx; }
+  .title { font-size: 34rpx; margin-bottom: 28rpx; }
+  input { height: 84rpx; font-size: 28rpx; }
+  button { height: 84rpx; font-size: 28rpx; }
+}

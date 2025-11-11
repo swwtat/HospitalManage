@@ -117,14 +117,21 @@
   </div>
 
   <script>
-    const api = (path, opts={})=>{
+    const api = async (path, opts={})=>{
       opts.headers = Object.assign({'Content-Type':'application/json'}, opts.headers||{});
       const token = localStorage.getItem('admin_token');
       if(token) opts.headers['Authorization'] = 'Bearer '+token;
       if(opts.body && typeof opts.body !== 'string') opts.body = JSON.stringify(opts.body);
-      return fetch(path, opts).then(r=>{
-        try{ return r.json(); }catch(e){ return { success:false, message:'invalid json' }; }
-      });
+      const res = await fetch(path, opts);
+      if (res.status === 401) {
+        // token expired or unauthorized: clear token and show login
+        localStorage.removeItem('admin_token');
+        document.getElementById('loginPanel').style.display='block';
+        document.getElementById('app').style.display='none';
+        alert('登录已过期，请重新登录');
+        return { success: false, message: 'Unauthorized', status: 401 };
+      }
+      try { return await res.json(); } catch(e) { return { success:false, message:'invalid json' }; }
     };
 
     // tabs wiring
@@ -199,7 +206,7 @@
       doctorsCache.forEach(d=>{
         const dept = deptsCache.find(x=>x.id==d.department_id);
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${d.id}</td><td>${escapeHtml(d.name)}</td><td>${escapeHtml(d.title||'')}</td><td>${dept?escapeHtml(dept.name):''}</td><td>${escapeHtml(d.contact||'')}</td><td><button data-id="${d.id}" class="delDoctor">删除</button></td>`;
+        tr.innerHTML = `<td>${d.id}</td><td>${escapeHtml(d.name)}</td><td>${escapeHtml(d.title||'')}</td><td>${dept?escapeHtml(dept.name):''}</td><td>${escapeHtml(d.contact||'')}</td><td><button data-id="${d.id}" class="setPwd">设置密码</button> <button data-id="${d.id}" class="delDoctor">删除</button></td>`;
         tbody.appendChild(tr);
       });
 
@@ -207,6 +214,18 @@
       const availSel = document.getElementById('availDoctor'); availSel.innerHTML='<option value="">请选择医生</option>';
       const docDept = document.getElementById('doctorDept'); if(docDept && docDept.options.length===0){ deptsCache.forEach(d=>{ const opt=document.createElement('option'); opt.value=d.id; opt.innerText=d.name; docDept.appendChild(opt); }); }
       doctorsCache.forEach(d=>{ const opt=document.createElement('option'); opt.value=d.id; opt.innerText=d.name; availSel.appendChild(opt); });
+
+      // set password handlers
+      document.querySelectorAll('.setPwd').forEach(btn=>btn.addEventListener('click', async ()=>{
+        const id = btn.dataset.id;
+        const pwd = prompt('为医生 ID='+id+' 设置新密码（明文）：');
+        if(!pwd) return alert('已取消或密码为空');
+        const username = prompt('可选：设定登录用户名（留空将使用默认 doctor'+id+'）');
+        const body = { password: pwd };
+        if(username) body.username = username;
+        const r = await api('/api/admin/doctors/'+id+'/set-password',{method:'POST', body});
+        if(r && r.success) { alert('设置成功'); await loadDoctors(); } else alert('设置失败: '+(r && r.message) || JSON.stringify(r));
+      }));
 
       // delete handlers
       document.querySelectorAll('.delDoctor').forEach(btn=>btn.addEventListener('click', async ()=>{

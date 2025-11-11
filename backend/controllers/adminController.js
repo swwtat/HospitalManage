@@ -61,6 +61,16 @@ exports.deleteDoctor = async (req, res) => {
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };
 
+exports.setDoctorPassword = async (req, res) => {
+  try {
+    const doctorId = req.params.id;
+    const { username, password } = req.body || {};
+    if (!password) return res.status(400).json({ success: false, message: '需要提供 password 字段' });
+    const row = await adminService.setDoctorPassword(doctorId, { username, password });
+    res.json({ success: true, data: row });
+  } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+};
+
 // Availability
 exports.getAvailabilityByDoctor = async (req, res) => {
   try {
@@ -154,4 +164,16 @@ exports.rejectLeaveRequest = async (req, res) => {
     await adminService.setLeaveRequestStatus(id, 'rejected', req.user.id);
     res.json({ success: true });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
+};
+
+// Debug: list all tables and optionally row counts
+exports.listAllTables = async (req, res) => {
+  try {
+    const db = require('../db');
+    const config = require('../config/default');
+    // query information_schema.tables for current database
+    const sql = `SELECT TABLE_NAME, TABLE_ROWS, ENGINE, TABLE_TYPE FROM information_schema.tables WHERE table_schema = ? ORDER BY TABLE_NAME`;
+    const [rows] = await db.query(sql, [config.db.database]);
+    res.json({ success: true, data: rows, database: config.db.database });
+  } catch (err) { console.error('listAllTables err', err); res.status(500).json({ success: false, message: err.message }); }
 };

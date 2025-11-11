@@ -32,6 +32,10 @@ app.use('/api/admin', adminRoutes);
 app.use('/api', publicRoutes);
 
 // 可选：在开发环境中运行 ensure_db（检测表并导入 init.sql）
+// 如果不是生产环境，则默认尝试初始化数据库结构，便于开发环境自动创建缺失表
+if (process.env.NODE_ENV !== 'production') {
+  process.env.ENSURE_DB = 'true';
+}
 if (process.env.ENSURE_DB === 'true') {
   try {
     console.log('ENSURE_DB=true, running ensure_db...');

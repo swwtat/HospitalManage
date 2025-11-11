@@ -1,0 +1,22 @@
+<!-- pages/docRegister/docRegister.wxml -->
+<view class="container">
+	<view class="controls">
+		<picker mode="date" value="{{date}}" bindchange="onDateChange">
+			<view class="picker">选择日期：{{date}}</view>
+		</picker>
+		<button bindtap="loadRegistrations">刷新</button>
+	</view>
+
+		<view class="list">
+			<block wx:for="{{registrations}}" wx:key="id">
+				<view class="item" bindtap="onOpenOrder" data-id="{{item.id}}">
+					<text>订单ID: {{item.id}}  状态: {{item.status}}  日期: {{item.date}} {{item.slot}}</text>
+					<view>患者: {{item.patient_name || item.account_username}}  电话: {{item.patient_phone || '—'}}</view>
+					<view>科室ID: {{item.department_id || '—'}} 医生ID: {{item.doctor_id || '—'}}</view>
+					<view>备注: {{item.note || '无'}}</view>
+					<view class="meta">创建于: {{item.created_at}}</view>
+				</view>
+			</block>
+			<view wx:if="{{!registrations || registrations.length === 0}}">暂无挂号记录</view>
+		</view>
+</view>

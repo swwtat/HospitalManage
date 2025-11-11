@@ -18,6 +18,7 @@ router.get('/doctors', adminController.listDoctors);
 router.post('/doctors', adminController.createDoctor);
 router.put('/doctors/:id', adminController.updateDoctor);
 router.delete('/doctors/:id', adminController.deleteDoctor);
+router.post('/doctors/:id/set-password', adminController.setDoctorPassword);
 
 // Availability (capacities per service type are stored in extra JSON)
 router.get('/availability', adminController.listAllAvailability); // list all availabilities
@@ -38,5 +39,8 @@ router.post('/doctor-reviews/:doctorId/reject', adminController.rejectDoctorProf
 router.get('/leave-requests', adminController.listLeaveRequests);
 router.post('/leave-requests/:id/approve', adminController.approveLeaveRequest);
 router.post('/leave-requests/:id/reject', adminController.rejectLeaveRequest);
+
+// Debug: show all tables and basic metadata
+router.get('/tables', adminController.listAllTables);
 
 module.exports = router;
