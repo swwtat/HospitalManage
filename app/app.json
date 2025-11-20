@@ -17,7 +17,8 @@
     "pages/docShift/docShift",
     "pages/orders/orders",
     "pages/payment/payment",
-    "pages/appointment/appointment"
+    "pages/appointment/appointment",
+    "pages/logs/logs"
   ],
   "window": {
     "backgroundTextStyle": "light",

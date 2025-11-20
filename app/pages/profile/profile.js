@@ -43,6 +43,10 @@ Page({
         break;
 
         case '医生登录':
+          if (this.data.logged) {
+            this.showLogoutPrompt();
+            return;
+          }
           url = '/pages/docLogin/docLogin';
           break;
 
@@ -72,6 +76,22 @@ Page({
     });
   },
 
+  showLogoutPrompt: function () {
+    wx.showModal({
+      title: '提示',
+      content: '使用该功能请先登出',
+      confirmText: '登出',
+      success: (res) => {
+        if (res.confirm) {
+          wx.removeStorageSync('token'); 
+          wx.removeStorageSync('account_id'); 
+          wx.removeStorageSync('account_name'); 
+          this.onShow();
+        }
+      }
+    });
+  },
+
   onLoad() {
     this.setData({
       logged: Boolean(wx.getStorageSync('account_id'))
@@ -83,8 +103,13 @@ Page({
     const accountId = wx.getStorageSync('account_id');
     const accountName = wx.getStorageSync('account_name');
     this.setData({
-      logged: Boolean(accountId),
+      logged: wx.getStorageSync('account_id') ? true : false,
       id_top: accountName || ''
     });
   },
+  onPullDownRefresh() {
+    this.onShow();
+  },
+
 });
+

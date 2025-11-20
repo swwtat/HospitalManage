@@ -2,86 +2,124 @@
 
 /* 页面背景与布局 */
 .container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #f3f9ff 0%, #e8f0fc 100%);
-  padding: 40rpx 28rpx;
-  box-sizing: border-box;
-}
-
-/* 卡片主容器 */
-.card {
-  width: 700rpx;
-  max-width: 92%;
-  background: #ffffff;
-  border-radius: 28rpx;
-  padding: 48rpx 38rpx 40rpx;
-  box-sizing: border-box;
-  box-shadow: 0 12rpx 40rpx rgba(0, 90, 200, 0.08);
-  border: 1rpx solid rgba(0, 0, 0, 0.04);
-  text-align: center;
-  animation: fadeIn 0.5s ease both;
-}
-
-/* 动画效果 */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20rpx); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* 标题 */
-.title {
-  font-size: 40rpx;
-  font-weight: 700;
-  color: #0f2e5a;
-  letter-spacing: 1rpx;
-  margin-bottom: 50rpx;
-  text-align: center;
-}
-
-/* 通用按钮样式 */
-button {
-  width: 100%;
-  height: 96rpx;
-  line-height: 96rpx;
-  margin-bottom: 28rpx;
-  border-radius: 20rpx;
-  font-size: 32rpx;
-  font-weight: 600;
-  letter-spacing: 1rpx;
-  color: #ffffff;
-  border: none;
-  transition: all 0.15s ease;
-  box-shadow: 0 14rpx 24rpx rgba(79, 158, 252, 0.18);
-}
-
-/* 按钮颜色分层设计 */
-button:nth-child(2) {
-  background-image: linear-gradient(90deg, #4f9efc 0%, #6bd3ff 100%);
-}
-button:nth-child(3) {
-  background-image: linear-gradient(90deg, #60b7ff 0%, #3f94ff 100%);
-}
-button:nth-child(4) {
-  background-image: linear-gradient(90deg, #70d2a3 0%, #45ba78 100%);
-}
-button:nth-child(5) {
-  background-image: linear-gradient(90deg, #ff6f6f 0%, #f84444 100%);
-  box-shadow: 0 14rpx 24rpx rgba(255, 100, 100, 0.22);
-}
-
-/* 按钮按下反馈 */
-button:active {
-  transform: translateY(3rpx);
-  opacity: 0.95;
-  box-shadow: 0 8rpx 14rpx rgba(0, 0, 0, 0.1);
-}
-
-/* 响应式适配 */
-@media (max-width: 340px) {
-  .card { padding: 30rpx; border-radius: 20rpx; }
-  .title { font-size: 34rpx; margin-bottom: 28rpx; }
-  button { height: 84rpx; font-size: 28rpx; line-height: 84rpx; }
-}
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* 调整为纵向布局 */
+    align-items: center;
+    justify-content: flex-start; /* 内容靠上 */
+    background: linear-gradient(135deg, #f3f9ff 0%, #e8f0fc 100%);
+    padding: 80rpx 30rpx 40rpx; /* 调整 padding */
+    box-sizing: border-box;
+  }
+  
+  /* 标题 */
+  .header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 50rpx;
+  }
+  .title {
+    font-size: 48rpx; /* 增大标题 */
+    font-weight: 800; /* 加粗 */
+    color: #0f2e5a;
+    letter-spacing: 2rpx;
+  }
+  
+  /* 移除原卡片样式，改为功能列表卡片 */
+  .function-list-card {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 30rpx; /* 增大圆角 */
+    padding: 10rpx 0; /* 内部留白调整给 list-item */
+    box-sizing: border-box;
+    box-shadow: 0 16rpx 40rpx rgba(0, 90, 200, 0.1); /* 增大并柔化阴影 */
+    border: 1rpx solid rgba(0, 0, 0, 0.03);
+  }
+  
+  /* 列表项通用样式 */
+  .list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 30rpx 40rpx; /* 内部 padding */
+    box-sizing: border-box;
+    transition: background-color 0.1s;
+    position: relative;
+  }
+  /* 列表项分隔线 */
+  .list-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 40rpx;
+    right: 40rpx;
+    height: 1rpx;
+    background-color: #f0f0f0;
+  }
+  
+  /* 列表项点击效果 */
+  .list-item:active {
+    background-color: #f7f9fc;
+  }
+  
+  /* 左侧内容容器 */
+  .item-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* 文本 */
+  .item-text {
+    font-size: 34rpx;
+    font-weight: 600;
+    color: #333;
+    margin-left: 20rpx;
+    letter-spacing: 0.5rpx;
+  }
+  
+  /* 右箭头 */
+  .arrow {
+    font-size: 40rpx;
+    color: #aaa;
+  }
+  
+  /* -------------------
+     图标样式 (利用原按钮配色)
+     ------------------- */
+  .icon {
+    width: 70rpx;
+    height: 70rpx;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32rpx;
+    box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.1);
+    color: #fff; /* 确保图标颜色为白色 */
+  }
+  
+  /* 密码管理 - 对应原按钮 1 的颜色 */
+  .account-icon {
+    background-image: linear-gradient(90deg, #4f9efc 0%, #6bd3ff 100%);
+  }
+  
+  /* 查看挂号单 - 对应原按钮 2 的颜色 */
+  .register-icon {
+    background-image: linear-gradient(90deg, #60b7ff 0%, #3f94ff 100%);
+  }
+  
+  /* 修改排班 - 对应原按钮 3 的颜色 */
+  .shift-icon {
+    background-image: linear-gradient(90deg, #70d2a3 0%, #45ba78 100%);
+  }
+  
+  /* 退出登录 - 对应原按钮 4 的颜色 */
+  .logout-icon {
+    background-image: linear-gradient(90deg, #ff6f6f 0%, #f84444 100%);
+  }
+  
+  /* 移除原 button 样式，因为它不再是按钮 */
+  button {
+    display: none;
+  }

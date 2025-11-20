@@ -33,7 +33,12 @@ Page({
   goRegister() { wx.navigateTo({ url: '/pages/docRegister/docRegister' }); },
   goShift() { wx.navigateTo({ url: '/pages/docShift/docShift' }); },
   
-  onLogout() { wx.removeStorageSync('token'); wx.reLaunch({ url: '/pages/docLogin/docLogin' }); },
+  onLogout() { 
+    wx.removeStorageSync('token'); 
+    wx.removeStorageSync('doctor_id'); 
+    wx.removeStorageSync('doctor'); 
+  wx.reLaunch({ url: '/pages/docLogin/docLogin'
+ }); },
 
   /**
    * 生命周期函数--监听页面隐藏

@@ -1,95 +1,160 @@
 /* 页面整体背景 */
+
+
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #f7f9fc;
+  background: linear-gradient(135deg, #a8caed 0%, #ffffff 100%);
   min-height: 100vh;
   padding-bottom: 40rpx;
+  /* 调整 padding-top，为轮播图预留空间或让它更贴近顶部 */
+  padding-top: 20rpx; 
+}
+
+/* 轮播图区域容器，用于定位和边距 */
+.swiper-area {
+  width: 90%;
+  padding: 0 30rpx; /* 增加左右边距，让轮播图居中 */
+  margin-bottom: 40rpx;
+}
+
+/* 顶部轮播 */
+.header-swiper {
+  width: 100%; /* 适应 swiper-area 的宽度 */
+  height: 440rpx; /* 略微增加高度 */
+  /* margin: 40rpx 0 30rpx 0; 移除，由 swiper-area 控制 */
+  border-radius: 36rpx; /* 增大圆角，更柔和 */
+  overflow: hidden;
+  box-shadow: 0 16rpx 40rpx rgba(0,0,0,0.15); /* 增大并柔化阴影 */
 }
 
 /* 顶部头图 */
 .header-image {
-  width: 92%;
-  height: 320rpx;
-  border-radius: 24rpx;
-  margin: 40rpx 0 30rpx 0;
-  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 100%;
+  border-radius: 36rpx; /* 统一圆角 */
   object-fit: cover;
 }
 
-/* 大卡片样式 */
+/* 大卡片分组容器 */
+.bigcard-group {
+  width: 90%;
+  padding: 0 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx; /* 增加卡片之间的间距 */
+}
+
+
+/* 大卡片整体 */
 .bigcard {
-  width: 85%;
-  height: 180rpx;
+  width: 90%; /* 适应 bigcard-group 宽度 */
+  height: 170rpx; /* 略微减少高度，更精致 */
   background: linear-gradient(135deg, #5b9df9, #6fc1ff);
-  border-radius: 26rpx;
-  box-shadow: 0 10rpx 30rpx rgba(91, 157, 249, 0.3);
-  margin: 20rpx 0;
+  border-radius: 32rpx; /* 统一圆角 */
+  /* 调整阴影颜色和参数，使其更柔和立体 */
+  box-shadow: 0 16rpx 40rpx rgba(91,157,249,0.35); 
+  /* margin: 24rpx 0; 移除，由 bigcard-group gap控制 */
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding-left: 50rpx;
-  transition: all 0.25s ease;
+  justify-content: space-between;
+  padding: 0 40rpx; /* 调整内边距 */
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* 优化过渡效果 */
+  position: relative;
+  overflow: hidden;
 }
 
-/* 点击浮动反馈 */
+/* 添加一个光斑效果 */
+.bigcard::before {
+  content: "";
+  position: absolute;
+  width: 180rpx;
+  height: 180rpx;
+  background: rgba(255, 255, 255, 0.1);
+  top: -40rpx;
+  right: 10rpx;
+  border-radius: 50%;
+  filter: blur(18rpx);
+}
+
+/* 内部左侧结构，用于更高级对齐 */
+.bigcard-left {
+  display: flex;
+  align-items: center;
+}
+
+/* 点击浮动反馈 - 优化为向下按压效果 */
 .bigcard:active {
-  transform: scale(0.97);
-  opacity: 0.9;
+  transform: translateY(4rpx); 
+  box-shadow: 0 8rpx 20rpx rgba(91,157,249,0.45); /* 阴影变浅 */
+  opacity: 1; /* 保持不透明度 */
 }
 
-/* 大卡片图标 */
+/* 大卡片图标 - 增加尺寸 */
 .card-icon {
   width: 80rpx;
   height: 80rpx;
-  margin-right: 40rpx;
+  margin-right: 30rpx;
 }
 
 /* 大卡片文字 */
 .bigcard-text {
-  font-size: 36rpx;
-  font-weight: 600;
+  font-size: 50rpx; /* 略微缩小字体，更精致 */
+  font-weight: 700; /* 加粗 */
   color: #fff;
-  letter-spacing: 2rpx;
+  letter-spacing: 0rpx;
+}
+
+/* 右箭头，现代感 */
+.bigcard-arrow {
+  font-size: 50rpx;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* 小卡片区 */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 30rpx;
-  width: 85%;
+  gap: 24rpx; /* 减少间距，更紧凑 */
+  width: 90%;
+  padding: 0 30rpx;
   margin-top: 40rpx;
 }
 
-/* 小卡片样式 */
+/* 小卡片 */
 .card {
+  height: 150rpx;
   background: #ffffff;
-  border-radius: 22rpx;
-  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.06);
-  padding: 40rpx 0;
+  border-radius: 28rpx; /* 统一圆角 */
+  box-shadow: 0 12rpx 30rpx rgba(0,0,0,0.1); /* 增大并柔化阴影 */
+  padding: 50rpx 0; /* 略微增大纵向 padding */
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: all 0.25s ease;
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* 点击反馈 */
+/* 点击反馈 - 优化为轻微的缩放反馈 */
 .card:active {
-  transform: translateY(4rpx);
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+  transform: scale(0.97);
+  box-shadow: 0 5rpx 15rpx rgba(0, 0, 0, 0.15);
 }
 
-/* 小卡片图标与文字 */
-.card-icon {
-  width: 70rpx;
-  height: 70rpx;
-  margin-bottom: 20rpx;
+/* 小卡片图标 - 新增 class，覆盖原来的 card-icon 样式 */
+.card-icon-small {
+  width: 65rpx;
+  height: 65rpx;
+  margin-bottom: 15rpx;
+  /* 移除 margin-right */
+  margin-right: 0; 
 }
 
+/* 小卡片文字 */
 .card-text {
-  font-size: 30rpx;
+  font-size: 34rpx; /* 略微缩小字体 */
   color: #333;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0rpx;
 }

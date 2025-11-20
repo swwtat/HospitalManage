@@ -1,14 +1,6 @@
 # HospitalManage 项目说明文档
-
-## 快速指南
-- 后端服务启动：`docker-compose up --build -d`，访问 `http://localhost:3000`。
-- 管理员账号登录后台：`admin` / `admin123`。
-- 小程序端预览：使用微信开发者工具打开 `app/` 目录。
-- 数据库初始化：首次启动时会自动执行 `./sql/init.sql` 创建表与初始数据。
-- RabbitMQ 本地启动：在 `docker-compose.yml` 中已配置 RabbitMQ 服务，访问管理 UI `http://localhost:15672`，默认账号 `guest` / `guest`。
-- 订单消息队列：参考 `doc/mq-guidelines.md` 了解发布/订阅规范与错误处理建议。
-- 调试建议与开发流程：参考 `doc/前后端集成注意事项.md` 了解常见问题与改进要点。
-- 若需帮助，请联系项目维护者。
+## 文档链接
+[快速入门手册](doc/快速入门手册.md) | [前后端集成注意事项](doc/前后端集成注意事项.md) | [接口规范说明](doc/接口规范说明.md) | [消息队列使用指南](doc/mq-guidelines.md)
 ## 项目功能
 - 医生管理：管理员可增删改查医生信息与排班。
 - 预约挂号：用户可查看医生排班并预约挂号，支持选择日期与时间段。

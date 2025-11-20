@@ -4,20 +4,27 @@
   <text class="title">个人档案</text>
 </view>
 
-<!-- ✅ 当已有档案且未编辑时，显示档案卡片 -->
 <view wx:if="{{hasProfile && !editMode}}" class="profile-card">
-  <view class="info-item"><text>身份：</text>{{role === 'student' ? '学生' : '教职工'}}</view>
-  <view class="info-item"><text>{{role === 'student' ? '学号' : '工号'}}：</text>{{idNumber}}</view>
-  <view class="info-item"><text>姓名：</text>{{name}}</view>
-  <view class="info-item"><text>身份证号：</text>{{idCard}}</view>
-  <view class="info-item"><text>电话号：</text>{{phone}}</view>
-  <view class="info-item"><text>性别：</text>{{gender}}</view>
-  <view class="info-item"><text>既往病史：</text>{{history || '无'}}</view>
-
-  <button class="edit-btn" bindtap="enterEditMode">编辑档案</button>
+  <view class="profile-header">
+    <text class="profile-role">{{role === 'student' ? '学生档案' : '教职工档案'}}</text>
+    <button class="edit-btn" bindtap="enterEditMode">编辑档案</button>
+  </view>
+  
+  <view class="info-grid">
+    <view class="info-item"><text class="info-label">身份：</text><text class="info-value">{{role === 'student' ? '学生' : '教职工'}}</text></view>
+    <view class="info-item"><text class="info-label">{{role === 'student' ? '学号' : '工号'}}：</text><text class="info-value">{{idNumber}}</text></view>
+    <view class="info-item"><text class="info-label">姓名：</text><text class="info-value">{{name}}</text></view>
+    <view class="info-item"><text class="info-label">身份证号：</text><text class="info-value">{{idCard}}</text></view>
+    <view class="info-item"><text class="info-label">电话号：</text><text class="info-value">{{phone}}</text></view>
+    <view class="info-item"><text class="info-label">性别：</text><text class="info-value">{{gender}}</text></view>
+  </view>
+  
+  <view class="history-block">
+    <text class="info-label">既往病史：</text>
+    <view class="history-content">{{history || '无'}}</view>
+  </view>
 </view>
 
-<!-- ✅ 否则显示原先填写表单 -->
 <view wx:else class="form-card">
 
   <view class="tab-bar">
@@ -34,35 +41,39 @@
   </view>
 
   <view class="input-group">
-    <text class="label">{{role === 'student' ? '学号' : '工号'}}</text>
-    <input class="input" value="{{idNumber}}" placeholder="请输入{{role === 'student' ? '学号' : '工号'}}" bindinput="onIDInput" />
-  </view>
+    <text class="label">💼</text>     <input class="input" value="{{idNumber}}" placeholder="请输入{{role === 'student' ? '学号' : '工号'}}" bindinput="onIDInput" />
+    <text class="input-label-text">{{role === 'student' ? '学号' : '工号'}}</text>   </view>
 
   <view class="input-group">
-    <text class="label">姓名</text>
+    <text class="label">👤</text>
     <input class="input" value="{{name}}" placeholder="请输入姓名" bindinput="onNameInput" />
+    <text class="input-label-text">姓名</text>
   </view>
 
   <view class="input-group">
-    <text class="label">身份证号</text>
+    <text class="label">🆔</text>
     <input class="input" value="{{idCard}}" placeholder="请输入身份证号" bindinput="onIDCardInput" />
+    <text class="input-label-text">身份证号</text>
   </view>
   
    <view class="input-group">
-    <text class="label">电话号</text>
+    <text class="label">📞</text>
     <input class="input" value="{{phone}}" placeholder="请输入电话号" bindinput="onTelInput" />
+    <text class="input-label-text">电话号</text>
   </view>
 
   <view class="input-group">
-    <text class="label">性别</text>
+    <text class="label">🚻</text>
     <picker mode="selector" range="{{genderOptions}}" bindchange="onGenderChange">
       <view class="picker">{{gender || '请选择性别'}}</view>
     </picker>
+    <text class="input-label-text">性别</text>
   </view>
 
-  <view class="input-group">
-    <text class="label">既往病史</text>
+  <view class="input-group textarea-group">
+    <text class="label textarea-label-icon">🩺</text>
     <textarea class="textarea" value="{{history}}" placeholder="请填写主要病史或健康状况" bindinput="onHistoryInput"></textarea>
+    <text class="input-label-text">既往病史</text>
   </view>
 
   <button class="submit-btn" bindtap="onSubmit">保存信息</button>

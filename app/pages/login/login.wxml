@@ -1,12 +1,12 @@
-<!-- pages/login/login.wxml -->
 <view class="container">
 
-<!-- 顶部Logo区域 -->
+<!-- 顶部 Logo + 标题（竖向布局） -->
 <view class="logo-area">
   <image class="logo" src="/assets/logo.png" mode="aspectFit"></image>
+</view>
+<view class="logo-area">
   <text class="app-title">校医院综合服务系统</text>
 </view>
-
 <!-- 登录卡片 -->
 <view class="login-card">
 
@@ -27,10 +27,12 @@
     <text class="divider">|</text>
     <text class="link" bindtap="onForgetPwd">忘记密码</text>
   </view>
+
 </view>
 
 <!-- 底部版权 -->
 <view class="footer">
   <text>© 2025 校医院服务系统</text>
 </view>
+
 </view>

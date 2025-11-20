@@ -131,6 +131,7 @@ button {
 .controls button,
 .new button {
   height: 88rpx;
+  width: 30%;
   background-image: linear-gradient(90deg, #4f9efc 0%, #6bd3ff 100%);
 }
 

@@ -1,147 +1,227 @@
 /* pages/profileForm/profileForm.wxss */
 page {
-  background: linear-gradient(135deg, #d4fc79, #96e6a1);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-
-.container {
-  width: 100%;
-  padding: 60rpx 40rpx;
-  box-sizing: border-box;
-}
-
-.header {
-  text-align: center;
-  margin-bottom: 40rpx;
-}
-
-.title {
-  font-size: 42rpx;
-  font-weight: bold;
-  color: #333;
-}
-
-/* 选项卡 */
-.tab-bar {
-  display: flex;
-  background-color: #fff;
-  border-radius: 50rpx;
-  padding: 10rpx;
-  box-shadow: 0 6rpx 16rpx rgba(0,0,0,0.1);
-  margin-bottom: 50rpx;
-}
-
-.tab-item {
-  flex: 1;
-  text-align: center;
-  padding: 20rpx 0;
-  font-size: 30rpx;
-  color: #666;
-  border-radius: 40rpx;
-  transition: all 0.3s;
-}
-
-.tab-item.active {
-  background: linear-gradient(135deg, #1aad19, #4cd964);
-  color: #fff;
-  font-weight: bold;
-  box-shadow: 0 4rpx 10rpx rgba(26,173,25,0.3);
-}
-
-/* 表单卡片 */
-.form-card {
-  background-color: #fff;
-  border-radius: 24rpx;
-  padding: 50rpx 40rpx;
-  box-shadow: 0 8rpx 24rpx rgba(0,0,0,0.1);
-}
-
-.input-group {
-  margin-bottom: 40rpx;
-}
-
-.label {
-  display: block;
-  font-size: 30rpx;
-  color: #444;
-  margin-bottom: 10rpx;
-}
-
-.input{
-  height: 90rpx;
-  width: 100%;
-  background: #f9f9f9;
-  border-radius: 12rpx;
-  padding: 20rpx;
-  border: 1px solid #ddd;
-  font-size: 32rpx;
-  color: #333;
-  box-sizing: border-box;
-}
-.textarea,
-.picker {
-  height: 90rpx;
-  width: 100%;
-  background: #f9f9f9;
-  border-radius: 12rpx;
-  padding: 20rpx;
-  border: 1px solid #ddd;
-  font-size: 32rpx;
-  color: #333;
-  box-sizing: border-box;
-}
-
-.input:focus,
-.textarea:focus {
-  border-color: #1aad19;
-  background: #fff;
-}
-
-.textarea {
-  min-height: 160rpx;
-  resize: none;
-}
-
-.picker {
-  line-height: 60rpx;
-}
-
-/* 提交按钮 */
-.submit-btn {
-  width: 100%;
-  background-color: #1aad19;
-  color: #fff;
-  padding: 24rpx 0;
-  border-radius: 16rpx;
-  font-size: 34rpx;
-  font-weight: bold;
-  box-shadow: 0 8rpx 16rpx rgba(26,173,25,0.3);
-  transition: all 0.2s ease-in-out;
-}
-
-.submit-btn:active {
-  transform: scale(0.97);
-  box-shadow: 0 4rpx 10rpx rgba(26,173,25,0.4);
-}
-.profile-card {
-  background-color: #fff;
-  padding: 24rpx;
-  margin: 24rpx;
-  border-radius: 16rpx;
-  box-shadow: 0 4rpx 8rpx rgba(0,0,0,0.1);
-}
-
-.info-item {
-  font-size: 30rpx;
-  margin: 12rpx 0;
-}
-
-.edit-btn {
-  margin-top: 30rpx;
-  background-color: #138616;
-  color: #fff;
-  border-radius: 12rpx;
-}
+    /* 调整渐变方向和颜色分布，使顶部更亮，底部过渡自然 */
+    background: linear-gradient(180deg, #c1e6ff 0%, #f7f9fc 100%); 
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  .container {
+    width: 100%;
+    padding: 40rpx 30rpx 80rpx 30rpx; /* 调整 padding，使内容更居中 */
+    box-sizing: border-box;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 50rpx; /* 增加与内容的间距 */
+  }
+  
+  .title {
+    font-size: 48rpx; /* 增大标题 */
+    font-weight: 800; /* 加粗 */
+    color: #222;
+    letter-spacing: 2rpx;
+  }
+  
+  /* 选项卡 */
+  .tab-bar {
+    display: flex;
+    background-color: #fff;
+    border-radius: 40rpx; /* 略微减小圆角，更精致 */
+    padding: 8rpx;
+    box-shadow: 0 8rpx 20rpx rgba(0,0,0,0.15); /* 柔化阴影 */
+    margin-bottom: 50rpx;
+  }
+  
+  .tab-item {
+    flex: 1;
+    text-align: center;
+    padding: 18rpx 0;
+    font-size: 32rpx; /* 略微增大字体 */
+    color: #666;
+    border-radius: 36rpx;
+    transition: all 0.25s ease;
+  }
+  
+  .tab-item.active {
+    /* 调整渐变，使其看起来更鲜亮 */
+    background: linear-gradient(135deg, #5b9df9, #6fc1ff);
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 16rpx 24rpx rgba(122, 198, 234, 0.5); /* 使用活跃色阴影 */
+  }
+  
+  /* 表单卡片 */
+  .form-card {
+    background-color: #fff;
+    border-radius: 30rpx; /* 增大圆角 */
+    padding: 40rpx; /* 调整内边距 */
+    box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.15); /* 增大阴影 */
+  }
+  
+  .input-group {
+    margin-bottom: 30rpx; /* 减小间距 */
+    position: relative;
+    display: flex; /* 启用 flex 布局 */
+    align-items: center;
+  }
+  
+  /* 移动 Label，作为左侧图标 */
+  .label {
+    display: flex;
+    font-size: 36rpx; /* 增大图标字体 */
+    color: #4d79d2; /* 使用主题色 */
+    margin-right: 20rpx;
+    align-items: center;
+    height: 90rpx;
+  }
+  .input-label-text { /* 内部文字 label 样式 */
+    position: absolute;
+    top: -24rpx;
+    left: 5rpx;
+    font-size: 24rpx;
+    color: #666;
+    background-color: #fff;
+    padding: 0 6rpx;
+    z-index: 10;
+  }
+  
+  
+  .input,
+  .picker {
+    height: 90rpx;
+    flex: 1; /* 占据剩余空间 */
+    background: #f9f9f9;
+    border-radius: 16rpx; /* 增大圆角 */
+    padding: 0 30rpx; /* 调整内边距 */
+    border: 2rpx solid #eee; /* 调整边框 */
+    font-size: 32rpx;
+    color: #333;
+    box-sizing: border-box;
+  }
+  
+  .picker {
+    display: flex;
+    align-items: center;
+    color: #666;
+  }
+  
+  .textarea-group {
+    align-items: flex-start;
+    margin-top: 50rpx;
+  }
+  .textarea-label-icon {
+    height: 160rpx;
+  }
+  
+  .textarea {
+    min-height: 160rpx;
+    padding-top: 20rpx;
+    line-height: 1.4;
+    flex: 1;
+    border-radius: 16rpx;
+    resize: none;
+  }
+  
+  .input:focus,
+  .textarea:focus {
+    border-color: #5b9df9;
+    background: #fff;
+    box-shadow: 0 0 0 4rpx rgba(26,173,25,0.1);
+  }
+  
+  /* 提交按钮 */
+  .submit-btn {
+    margin-top: 30rpx;
+    width: 100%;
+    background-color: #7bbfe9;
+    color: #fff;
+    padding: 28rpx 0; /* 增大高度 */
+    border-radius: 20rpx; /* 增大圆角 */
+    font-size: 36rpx;
+    font-weight: bold;
+    box-shadow: 0 10rpx 20rpx rgba(25, 62, 173, 0.4);
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .submit-btn:active {
+    transform: translateY(4rpx); /* 按压效果 */
+    box-shadow: 0 4rpx 10rpx rgba(25, 25, 173, 0.5);
+  }
+  
+  /* 档案信息卡片样式优化 */
+  .profile-card {
+    background-color: #fff;
+    padding: 40rpx;
+    border-radius: 30rpx; /* 统一大圆角 */
+    box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.15);
+  }
+  
+  .profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30rpx;
+    padding-bottom: 20rpx;
+    border-bottom: 1rpx solid #eee;
+  }
+  
+  .profile-role {
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333;
+    position: relative;
+    padding-left: 20rpx;
+  }
+  .profile-role::before {
+    content: '▪';
+    position: absolute;
+    left: 0;
+    color: #5b9df9;
+  }
+  
+  .edit-btn {
+    margin: 0;
+    background-color: #5b9df9; /* 统一编辑按钮颜色 */
+    color: #fff;
+    border-radius: 14rpx;
+    font-size: 28rpx;
+    padding: 12rpx 24rpx;
+  }
+  
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 两列布局 */
+    gap: 20rpx 30rpx;
+    margin-bottom: 30rpx;
+  }
+  
+  .info-item {
+    font-size: 30rpx;
+    margin: 0;
+    line-height: 1.4;
+  }
+  .info-label {
+    font-weight: 500;
+    color: #666;
+    margin-right: 10rpx;
+  }
+  .info-value {
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .history-block {
+    padding-top: 20rpx;
+    border-top: 1rpx solid #eee;
+  }
+  .history-content {
+    margin-top: 10rpx;
+    font-size: 30rpx;
+    color: #333;
+    line-height: 1.6;
+    padding: 10rpx 0;
+  }
