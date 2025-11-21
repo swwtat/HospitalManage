@@ -21,6 +21,7 @@
     "pages/logs/logs",
     "pages/docInfo/docInfo",
     "pages/docAbsence/docAbsence"
+    "pages/setting/changePassword/changePassword",
   ],
   "window": {
     "backgroundTextStyle": "light",
