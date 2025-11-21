@@ -18,7 +18,9 @@
     "pages/orders/orders",
     "pages/payment/payment",
     "pages/appointment/appointment",
-    "pages/logs/logs"
+    "pages/logs/logs",
+    "pages/docInfo/docInfo",
+    "pages/docAbsence/docAbsence"
   ],
   "window": {
     "backgroundTextStyle": "light",
