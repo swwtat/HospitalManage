@@ -1,0 +1,36 @@
+<!-- pages/book/book.wxml -->
+<view class="container">
+  <view class="field">
+    <text class="label">科室</text>
+    <picker mode="selector" range="{{deptOptions}}" value="{{deptIndex}}" bindchange="onDeptChange">
+      <view class="picker">{{deptOptions[deptIndex] || '请选择科室'}}</view>
+    </picker>
+  </view>
+
+  <view class="field">
+    <text class="label">医生</text>
+    <picker mode="selector" range="{{doctorsNames}}" value="{{doctorIndex}}" bindchange="onDoctorChange">
+      <view class="picker">{{doctors[doctorIndex] ? doctors[doctorIndex].name : '请选择医生'}}</view>
+    </picker>
+  </view>
+
+  <view class="field">
+    <text class="label">日期</text>
+    <picker mode="date" value="{{date}}" start="{{minDate}}" bindchange="onDateChange">
+      <view class="picker">{{date || '请选择日期'}}</view>
+    </picker>
+  </view>
+
+  <view class="field">
+    <text class="label">时段</text>
+    <picker mode="selector" range="{{slotsLabels}}" value="{{slotIndex}}" bindchange="onSlotChange">
+      <view class="picker">{{slots[slotIndex].label}}</view>
+    </picker>
+  </view>
+
+  <view class="actions">
+    <button class="primary" bindtap="submit">提交预约</button>
+  </view>
+
+  <view class="message">{{message}}</view>
+</view>

@@ -14,10 +14,11 @@ Page({
   loadOrders: function() {
     const account_id = wx.getStorageSync('account_id') || 1;
     const { request } = require('../../utils/request');
-    request({ url: `/api/registration/list/${account_id}`, method: 'GET' })
+    // 使用仅订单接口，避免候补预约记录混入订单
+    request({ url: `/api/registration/orders/${account_id}`, method: 'GET' })
       .then(res => {
         if (res && res.success) {
-          this.setData({ orders: res.data, message: '' });
+            this.setData({ orders: res.data || [], message: '' });
         } else {
           this.setData({ message: '无法加载订单' });
         }

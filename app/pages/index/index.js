@@ -16,7 +16,7 @@ Page({
         url = '/pages/docProfile/docProfile';
         break;
       case '预约':
-        url = '/pages/appointment/appointment';
+        url = '/pages/book/book';
         break;
       case '健康档案':
         url = '/pages/health/health';
