@@ -4,6 +4,8 @@ const controller = require('../controllers/registrationController');
 
 router.post('/create', controller.createRegistration);
 router.get('/list/:user_id', controller.listByUser);
+// 新增：仅订单（不含候补预约）
+router.get('/orders/:user_id', controller.listOrdersByUser);
 router.post('/update-status', controller.updateStatus);
 router.post('/cancel', async (req, res) => {
 	try {

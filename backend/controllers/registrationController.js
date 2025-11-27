@@ -13,14 +13,20 @@ exports.createRegistration = async (req, res) => {
     const priceMap = { '普通号': 0.00, '专家号': 20.00, '特需号': 50.00 };
     const amount = priceMap[regi_type] !== undefined ? priceMap[regi_type] : 0.00;
 
-    const order = await registrationService.createRegistration({ account_id, department_id, doctor_id, date, slot, note });
+    const force_waitlist = req.body.force_waitlist === true || req.body.force_waitlist === 'true';
+    const order = await registrationService.createRegistration({ account_id, department_id, doctor_id, date, slot, note, force_waitlist });
 
-    // 始终创建 payment 记录（即使金额为0），并要求用户/前端手动完成支付以将 payment.status 置为 paid
-    const payment = await paymentService.createPayment({ account_id, order_id: order.id, amount, currency: 'CNY' });
-    await db.query('UPDATE orders SET payment_id = ? WHERE id = ?', [payment.id, order.id]);
+    // 仅在订单被确认（confirmed）且需收费时创建 payment 记录；候补（waiting/is_waitlist）不应立即要求支付
+    let payment = null;
+    let payment_required = false;
+    if (order && order.status === 'confirmed' && amount > 0) {
+      payment = await paymentService.createPayment({ account_id, order_id: order.id, amount, currency: 'CNY' });
+      await db.query('UPDATE orders SET payment_id = ? WHERE id = ?', [payment.id, order.id]);
+      payment_required = true;
+    }
 
-    // 返回包含 payment 信息的结果，前端应跳转到 payment 页面并等待用户手动支付
-    res.json({ success: true, data: order, payment, payment_required: true });
+    // 返回订单信息；如果不需要支付则不返回 payment（或返回 null），前端根据 payment_required 决定是否展示支付入口
+    res.json({ success: true, data: order, payment, payment_required });
   } catch (err) {
     console.error('createRegistration error', err);
     res.status(500).json({ success: false, message: err.message });
@@ -46,6 +52,24 @@ exports.listByUser = async (req, res) => {
     res.json({ success: true, data: rows });
   } catch (err) {
     res.status(500).json({ success: false });
+  }
+};
+
+// 仅返回“订单”视图需要的数据：排除候补预约（waiting/is_waitlist）
+exports.listOrdersByUser = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const [rows] = await db.query(
+      `SELECT o.*, p.id as payment_id, p.amount as payment_amount, p.status as payment_status, p.paid_at as payment_paid_at
+       FROM orders o LEFT JOIN payments p ON o.payment_id = p.id
+       WHERE o.account_id = ? AND NOT (o.is_waitlist = 1 OR o.status = 'waiting')
+       ORDER BY o.created_at DESC`,
+      [user_id]
+    );
+    res.json({ success: true, data: rows });
+  } catch (err) {
+    console.error('listOrdersByUser error', err);
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
