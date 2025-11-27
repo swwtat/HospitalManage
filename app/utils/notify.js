@@ -27,4 +27,13 @@ async function requestSubscription(templateIds = []) {
   });
 }
 
+async function fetchNotifications() {
+  try {
+    const r = await request({ url: '/api/notify/list', method: 'GET' });
+    return r;
+  } catch (e) {
+    return { success: false, message: e.message };
+  }
+}
+
 module.exports = { requestSubscription };

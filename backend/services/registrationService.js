@@ -48,47 +48,45 @@ async function createRegistration(payload) {
 
     const normDate = normalizeDate(date);
 
-    // 查找 availability
+    // 查找 availability（仅锁定，绝不在预约/挂号流程中创建新号源）
     // Lock all availabilities for this doctor & date (day-level pool)
     const [availRows] = await conn.query(
       'SELECT * FROM doctor_availability WHERE doctor_id = ? AND date = ? FOR UPDATE',
       [doctor_id, normDate]
     );
 
+    // find availability matching slot if exists; if none, keep null to avoid implying capacity
     let availability = null;
     let is_waitlist = false;
-
-    if (!availRows || availRows.length === 0) {
-      // 若没有任何 availability 记录，创建一条代表该 slot 的记录，capacity=1
-      const [ins] = await conn.query(
-        'INSERT INTO doctor_availability (doctor_id, date, slot, capacity, booked) VALUES (?, ?, ?, 1, 0)',
-        [doctor_id, normDate, slot]
-      );
-      const [newRows] = await conn.query('SELECT * FROM doctor_availability WHERE id = ?', [ins.insertId]);
-      availability = newRows[0];
-      // reload availRows
-      const [reloaded] = await conn.query('SELECT * FROM doctor_availability WHERE doctor_id = ? AND date = ? FOR UPDATE', [doctor_id, date]);
-      // use reloaded as current day state
-      // fall through
+    if (Array.isArray(availRows) && availRows.length > 0) {
+      availability = availRows.find(r => r.slot === slot) || null;
     }
 
-    // refresh availRows (in case we inserted)
-  const [currentAvailRows] = await conn.query('SELECT * FROM doctor_availability WHERE doctor_id = ? AND date = ? FOR UPDATE', [doctor_id, normDate]);
-    // find availability matching slot if exists
-    availability = currentAvailRows.find(r => r.slot === slot) || currentAvailRows[0];
+    // treat capacity/booked as day-level: use first row's capacity/booked as representative (0 if no rows)
+    const dayCapacity = (availRows[0] && availRows[0].capacity) ? parseInt(availRows[0].capacity, 10) : 0;
+    const dayBooked = (availRows[0] && availRows[0].booked) ? parseInt(availRows[0].booked, 10) : 0;
 
-    // treat capacity/booked as day-level: use first row's capacity/booked as representative
-    const dayCapacity = (currentAvailRows[0] && currentAvailRows[0].capacity) ? parseInt(currentAvailRows[0].capacity, 10) : 0;
-    const dayBooked = (currentAvailRows[0] && currentAvailRows[0].booked) ? parseInt(currentAvailRows[0].booked, 10) : 0;
+    // If caller explicitly requests a forced waitlist (create an appointment rather than immediate registration),
+    // insert a waiting order without modifying booked counters.
+    if (payload && payload.force_waitlist) {
+      const [r] = await conn.query(
+        'INSERT INTO orders (account_id, department_id, doctor_id, availability_id, date, slot, status, is_waitlist, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [account_id, department_id, doctor_id, availability ? availability.id : null, normDate, slot, 'waiting', true, note || null]
+      );
+      const [orderRows] = await conn.query('SELECT * FROM orders WHERE id = ?', [r.insertId]);
+      await conn.commit();
+      try { await mqPublisher.publishOrderEvent('waiting', orderRows[0]); } catch (e) { console.warn('MQ publish failed', e.message); }
+      return orderRows[0];
+    }
 
     if (dayBooked < dayCapacity) {
       // confirm: increment booked for all avail rows for that doctor/date
-  const newBooked = dayBooked + 1;
-  await conn.query('UPDATE doctor_availability SET booked = ? WHERE doctor_id = ? AND date = ?', [newBooked, doctor_id, normDate]);
+      const newBooked = dayBooked + 1;
+      await conn.query('UPDATE doctor_availability SET booked = ? WHERE doctor_id = ? AND date = ?', [newBooked, doctor_id, normDate]);
 
       const [r] = await conn.query(
         'INSERT INTO orders (account_id, department_id, doctor_id, availability_id, date, slot, status, is_waitlist, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [account_id, department_id, doctor_id, availability.id, normDate, slot, 'confirmed', false, note || null]
+        [account_id, department_id, doctor_id, (availability ? availability.id : null), normDate, slot, 'confirmed', false, note || null]
       );
 
       const [orderRows] = await conn.query('SELECT * FROM orders WHERE id = ?', [r.insertId]);
@@ -135,8 +133,8 @@ async function cancelRegistration(orderId, cancelledBy) {
       return order;
     }
 
-    // 更新订单状态
-    await conn.query('UPDATE orders SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?', ['cancelled', orderId]);
+    // 更新订单状态，并清除候补标志 is_waitlist（避免残留）
+    await conn.query('UPDATE orders SET status = ?, is_waitlist = 0, updated_at = CURRENT_TIMESTAMP WHERE id = ?', ['cancelled', orderId]);
 
     // 若之前是 confirmed，需要减少 day-level booked 并 promote day-level waiting queue
     if (order.status === 'confirmed') {

@@ -1,0 +1,7 @@
+.container { padding: 12px; }
+.field { margin-bottom: 12px; background: #fff; padding: 10px; border-radius: 6px; }
+.label { display: block; color: #666; font-size: 13px; margin-bottom: 6px; }
+.picker { padding: 8px 6px; border: 1px solid #eee; border-radius: 4px; color: #333; }
+.actions { margin-top: 18px; }
+.primary { background-color: #07c160; color: #fff; padding: 10px 12px; border-radius: 6px; }
+.message { color: #ff4444; margin-top: 10px; text-align: center; }
