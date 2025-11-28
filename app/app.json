@@ -23,7 +23,8 @@
     "pages/docInfo/docInfo",
     "pages/docAbsence/docAbsence",
     "pages/setting/changePassword/changePassword",
-    "pages/catalog/catalog"
+    "pages/catalog/catalog",
+    "pages/aiChat/aiChat"
   ],
   "window": {
     "backgroundTextStyle": "light",

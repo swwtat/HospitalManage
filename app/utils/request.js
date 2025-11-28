@@ -49,4 +49,28 @@ const request = (options) => {
   });
 };
 
-module.exports = { request, BASE_URL };
+// convenience: GET with callback or promise
+const get = (url, callbacks) => {
+  const opts = { url, method: 'GET' };
+  if (callbacks && (callbacks.success || callbacks.fail)) {
+    request(opts).then(data => callbacks.success && callbacks.success({ data })).catch(err => callbacks.fail && callbacks.fail(err));
+    return;
+  }
+  return request(opts);
+};
+
+// convenience: POST with data and callback or promise
+const post = (url, data, callbacks) => {
+  // signature: post(url, data, callbacks) or post(url, callbacks)
+  if (typeof data === 'object' && !callbacks && (data.success || data.fail)) {
+    callbacks = data; data = {};
+  }
+  const opts = { url, method: 'POST', data: data || {} };
+  if (callbacks && (callbacks.success || callbacks.fail)) {
+    request(opts).then(data => callbacks.success && callbacks.success({ data })).catch(err => callbacks.fail && callbacks.fail(err));
+    return;
+  }
+  return request(opts);
+};
+
+module.exports = { request, get, post, BASE_URL };

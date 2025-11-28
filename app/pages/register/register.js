@@ -61,6 +61,50 @@ Page({
       // 医生未选，但科室已选且医生列表已加载，停留在步骤 2
       this.setData({ currentStep: 2 });
     }
+
+    // === AI 表单填充：从 aiFormData 中读取预填内容 ===
+    const aiForm = wx.getStorageSync('aiFormData');
+    if (aiForm) {
+      try {
+        // aiForm 可能是对象或字符串
+        const form = (typeof aiForm === 'string') ? JSON.parse(aiForm) : aiForm;
+
+        // department_id -> 加载科室后选择（如果有实现科室列表的话，这里只触发医生加载）
+        if (form.department_id) {
+          // 触发加载医生并设置 selectedDept 为简要对象
+          this.setData({ selectedDept: { id: form.department_id, name: form.department_name || '已选择科室' }, currentStep: 2 });
+          this.loadDoctorsForDept(form.department_id);
+        }
+
+        if (form.doctor_id) {
+          // 如果已经有医生 id，设置临时 selectedDoctor（如果完整信息缺失，后续 loadDoctorsForDept 会覆盖）
+          this.setData({ selectedDoctor: { id: form.doctor_id, name: form.doctor_name || '已选择医生' }, currentStep: 3 });
+          // 加载号源
+          this.loadAvailability(form.doctor_id, form.date || undefined);
+        }
+
+        if (form.regi_type) {
+          const regi = form.regi_type;
+          const key = (regi || '').replace(/号$/, '').trim();
+          this.setData({ selectedRegi: regi, selectedRegiKey: key, currentStep: (this.data.currentStep < 4 ? 4 : this.data.currentStep) });
+        }
+
+        if (form.date) {
+          this.setData({ selectedDate: form.date });
+          wx.setStorageSync('selectedDate', form.date);
+        }
+        if (form.slot) {
+          this.setData({ selectedSlot: form.slot });
+          wx.setStorageSync('selectedSlot', form.slot);
+        }
+
+      } catch (e) {
+        console.error('apply aiFormData failed', e);
+      } finally {
+        // 应用后清理缓存，避免重复填充
+        wx.removeStorageSync('aiFormData');
+      }
+    }
   },
   
   goToDepartment() {

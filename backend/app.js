@@ -11,6 +11,7 @@ const notifyRoutes = require('./routes/notify');
 const adminRoutes = require('./routes/admin');
 const publicRoutes = require('./routes/public');
 const path = require('path');
+const aiRoutes = require('./routes/aiRoutes');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/api/patient', patientRoutes);
 app.use('/api/doctor', doctorRoutes);
 app.use('/api/mq', mqRoutes);
 app.use('/api/notify', notifyRoutes);
+app.use('/api/ai', aiRoutes);
 // Admin static UI
 app.use('/admin', express.static(path.join(__dirname, 'admin')));
 // Admin API

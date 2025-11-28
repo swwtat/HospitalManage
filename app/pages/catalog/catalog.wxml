@@ -1,2 +1,75 @@
-<!--pages/catalog/catalog.wxml-->
-<text>pages/catalog/catalog.wxml</text>
+<view class="catalog-container">
+    <view class="page-header">
+    <text class="page-title">功能导航</text>
+    <text class="page-subtitle">
+      <block wx:if="{{!isLoggedIn}}">👋 欢迎！登录后体验全部功能</block>
+      <block wx:elif="{{userRole === 'patient'}}">👤 快捷服务：患者挂号系统</block>
+      <block wx:elif="{{userRole === 'doctor'}}">⚕️ 核心入口：医生工作台</block>
+      <block wx:else>医院全功能索引</block>
+    </text>
+  </view>
+  
+  <view class="main-content">
+    
+    <view class="section" wx:if="{{userRole === 'patient' || !isLoggedIn}}">
+      <view class="section-title patient-title">
+        <text>👤 患者挂号系统</text>
+      </view>
+      <view class="pages-grid">
+        <view 
+          wx:for="{{patientPages}}" 
+          wx:key="id"
+          class="page-card"
+          bindtap="navigateTo"
+          data-url="{{item.page}}"
+        >
+          <view class="card-icon">{{item.icon}}</view>
+          <view class="card-name">{{item.name}}</view>
+          <view class="card-desc">{{item.desc}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section" wx:if="{{userRole === 'doctor' && isLoggedIn}}">
+      <view class="section-title doctor-title">
+        <text>⚕️ 医生工作台</text>
+      </view>
+      <view class="pages-grid">
+        <view 
+          wx:for="{{doctorPages}}" 
+          wx:key="id"
+          class="page-card"
+          bindtap="navigateTo"
+          data-url="{{item.page}}"
+        >
+          <view class="card-icon">{{item.icon}}</view>
+          <view class="card-name">{{item.name}}</view>
+          <view class="card-desc">{{item.desc}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section last-section">
+      <view class="section-title other-title">
+        <text>⚙️ 账户与设置</text>
+      </view>
+      <view class="pages-grid">
+        <view 
+          wx:for="{{sharedPages}}" 
+          wx:key="id"
+          class="page-card"
+          bindtap="navigateTo"
+          data-url="{{item.page}}"
+        >
+          <view class="card-icon">{{item.icon}}</view>
+          <view class="card-name">{{item.name}}</view>
+          <view class="card-desc">{{item.desc}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+    <view class="footer-note">
+    <text>提示：点击卡片进入相应功能。部分功能需要登录后才能使用。</text>
+  </view>
+</view>

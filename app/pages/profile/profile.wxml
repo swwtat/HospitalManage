@@ -22,13 +22,13 @@
 
   <view class="card-item" bindtap="onClick" data-action="我的挂号">
     <image class="item-icon" src="../../assets/search.png"></image>
-    <text class="item-text">我的挂号/订单</text>
+    <text class="item-text">我的挂号订单</text>
     <text class="arrow-item">></text>
   </view>
 
   <view class="card-item" bindtap="onClick" data-action="我的预约">
     <image class="item-icon" src="../../assets/appointment.png"></image>
-    <text class="item-text">我的预约/候补</text>
+    <text class="item-text">我的预约候补</text>
     <text class="arrow-item">></text>
   </view>
 

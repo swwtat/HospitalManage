@@ -48,7 +48,7 @@
             <text class="bigcard-desc">当日号源 / 实时排队</text>
           </view>
         </view>
-        <view class="arrow-btn">Go</view>
+        <view class="arrow-btn">></view>
       </view>
 
       <view class="bigcard card-green ripple-effect" bindtap="onClick" data-action="预约">
@@ -62,7 +62,7 @@
             <text class="bigcard-desc">专家门诊 / 提前安排</text>
           </view>
         </view>
-        <view class="arrow-btn">Go</view>
+        <view class="arrow-btn">></view>
       </view>
     </view>
 
@@ -74,7 +74,7 @@
         <text class="card-text">报告查询</text>
       </view>
 
-      <view class="card ripple-effect" bindtap="onClick" data-action="健康档案">
+      <view class="card ripple-effect" bindtap="onClick" data-action="智能分诊">
         <view class="icon-circle c-orange">
           <image class="card-icon-small" src="../../assets/health.png"></image>
         </view>

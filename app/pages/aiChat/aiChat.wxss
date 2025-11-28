@@ -1,0 +1,269 @@
+/* pages/aiChat/aiChat.wxss */
+
+/* 整体布局 */
+.ai-chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f7f7f7;
+  padding-bottom: constant(safe-area-inset-bottom); /* 适配底部安全区 */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 头部 */
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  background-color: #ffffff;
+  border-bottom: 1rpx solid #eee;
+  box-shadow: 0 1rpx 3rpx rgba(0,0,0,0.05);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.header-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.header-btn {
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+  color: #999;
+  padding: 10rpx;
+}
+.clear-icon {
+  margin-right: 5rpx;
+}
+
+/* 消息滚动区域 */
+.messages-scroll {
+  flex: 1;
+  padding: 20rpx 30rpx;
+  padding-top: 100rpx; /* 留出头部空间 */
+  /* 解决滚动穿透问题 */
+  box-sizing: border-box; 
+  overflow-y: scroll;
+}
+.scroll-bottom-anchor {
+  height: 1rpx;
+}
+
+/* 消息项 */
+.message-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 30rpx;
+}
+
+/* 头像 */
+.avatar {
+  width: 68rpx;
+  height: 68rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.1);
+}
+.bot-avatar {
+  margin-right: 15rpx;
+}
+.user-avatar {
+  margin-left: 15rpx;
+}
+
+.msg-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 60%;
+}
+
+/* 机器人消息 */
+.bot-msg {
+  justify-content: flex-start;
+}
+.bot-msg .msg-content-wrapper {
+  align-items: flex-start;
+}
+
+/* 用户消息 */
+.user-msg {
+  justify-content: flex-end;
+}
+.user-msg .msg-content-wrapper {
+  align-items: flex-end;
+}
+
+/* 消息气泡 */
+.msg-bubble {
+  padding: 20rpx 24rpx;
+  border-radius: 20rpx;
+  line-height: 1.4;
+  font-size: 30rpx;
+  position: relative;
+  word-break: break-all;
+  white-space: pre-wrap; /* 保持换行 */
+}
+
+.bot-bubble {
+  background-color: #ffffff;
+  color: #333;
+  border-top-left-radius: 8rpx;
+  box-shadow: 0 1rpx 3rpx rgba(0, 0, 0, 0.05);
+}
+
+.user-bubble {
+  background-color: #2b68ff; /* 品牌色 */
+  color: white;
+  border-top-right-radius: 8rpx;
+}
+
+/* 消息时间 */
+.msg-time {
+  font-size: 20rpx;
+  color: #aaa;
+  margin-top: 5rpx;
+}
+
+/* 机器人快捷操作按钮组 */
+.msg-actions {
+  margin-top: 15rpx;
+  padding-top: 10rpx;
+  border-top: 1rpx solid rgba(0, 0, 0, 0.08);
+}
+.action-btn {
+  display: block;
+  padding: 10rpx 0;
+  font-size: 26rpx;
+  color: #2b68ff;
+  text-align: left;
+  transition: background-color 0.1s;
+}
+.action-btn:active {
+  background-color: rgba(43, 104, 255, 0.05);
+  border-radius: 5rpx;
+}
+
+/* 正在加载动画 */
+.loading-bubble {
+  background-color: #f0f0f0;
+}
+.loading-dots {
+  display: flex;
+  align-items: center;
+  height: 40rpx;
+}
+.dot {
+  width: 12rpx;
+  height: 12rpx;
+  background-color: #999;
+  border-radius: 50%;
+  margin: 0 4rpx;
+  animation: bounce 1.2s infinite ease-in-out both;
+}
+.dot:nth-child(1) {
+  animation-delay: -0.32s;
+}
+.dot:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+      transform: scale(0);
+  }
+  40% {
+      transform: scale(1);
+  }
+}
+
+/* 快捷建议区域 */
+.suggestions-area {
+  padding: 20rpx 0;
+  background-color: #f0f0f0;
+  border-top: 1rpx solid #e0e0e0;
+}
+.suggestions-scroll {
+  white-space: nowrap;
+  width: 100%;
+}
+.suggestions-list {
+  display: flex;
+  padding: 0 20rpx;
+}
+.suggestion-chip {
+  display: inline-flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1rpx solid #ddd;
+  border-radius: 30rpx;
+  padding: 10rpx 20rpx;
+  margin-right: 15rpx;
+  font-size: 26rpx;
+  color: #555;
+  transition: background-color 0.2s;
+}
+.suggestion-chip:active {
+  background-color: #e6f0ff;
+  border-color: #2b68ff;
+  color: #2b68ff;
+}
+.chip-icon {
+  margin-right: 8rpx;
+}
+
+/* 输入区域 */
+.input-area {
+  padding: 20rpx 30rpx;
+  background-color: #fff;
+  border-top: 1rpx solid #ddd;
+}
+.input-wrapper {
+  display: flex;
+  align-items: flex-end; /* 确保发送按钮和输入框底部对齐 */
+}
+.input-box {
+  flex: 1;
+  min-height: 40px; /* 最小高度 */
+  max-height: 100px; /* 最大高度 */
+  background-color: #f7f7f7;
+  border-radius: 20rpx;
+  padding: 15rpx 25rpx;
+  font-size: 30rpx;
+  line-height: 1.4;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.input-placeholder {
+  color: #bbb;
+}
+
+.send-btn {
+  width: 120rpx;
+  height: 40px; /* 与最小输入高度保持一致 */
+  margin-left: 20rpx;
+  background-color: #2b68ff;
+  border-radius: 20rpx;
+  color: white;
+  font-size: 30rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+.send-btn.disabled {
+  background-color: #ccc;
+  pointer-events: none;
+}
+.send-btn:active:not(.disabled) {
+  background-color: #1a4dcc;
+}

@@ -1,0 +1,93 @@
+<view class="ai-chat-container">
+    
+    <view class="chat-header">
+        <text class="header-title">🤖 AI 智能助手</text>
+        <view class="header-btn" bindtap="clearChat">
+            <text class="clear-icon">🧹</text>
+            <text>清空</text>
+        </view>
+    </view>
+
+    <scroll-view 
+        class="messages-scroll" 
+        scroll-y="true" 
+        scroll-into-view="last-message" 
+        scroll-with-animation="true"
+    >
+        <view class="messages-list">
+            <view wx:for="{{messages}}" wx:key="id" id="{{item.id}}" class="message-item {{item.type === 'user' ? 'user-msg' : 'bot-msg'}}">
+                
+                <image wx:if="{{item.type === 'bot'}}" class="avatar bot-avatar" src="../../assets/icon_ai_bot.png"></image>
+                
+                <view class="msg-content-wrapper">
+                    <view class="msg-bubble {{item.type === 'user' ? 'user-bubble' : 'bot-bubble'}}">
+                        <text class="msg-text">{{item.content}}</text>
+                        
+                        <view wx:if="{{item.type === 'bot' && item.actions && item.actions.length > 0}}" class="msg-actions">
+                            <view wx:for="{{item.actions}}" wx:key="url" wx:for-item="action" class="action-btn" bindtap="handleAction" data-action="{{JSON.stringify(action)}}">
+                                {{action.label}}
+                            </view>
+                        </view>
+                    </view>
+                    <text class="msg-time">{{item.timestamp}}</text>
+                </view>
+
+                <image wx:if="{{item.type === 'user'}}" class="avatar user-avatar" src="../../assets/icon_user_default.png"></image>
+            </view>
+            
+            <view wx:if="{{isLoading}}" class="message-item bot-msg" id="last-message">
+                <image class="avatar bot-avatar" src="../../assets/icon_ai_bot.png"></image>
+                <view class="msg-content-wrapper">
+                    <view class="msg-bubble bot-bubble loading-bubble">
+                        <view class="loading-dots">
+                            <view class="dot"></view>
+                            <view class="dot"></view>
+                            <view class="dot"></view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+            
+            <view id="last-message" class="scroll-bottom-anchor"></view>
+
+        </view>
+    </scroll-view>
+
+    <view wx:if="{{suggestions && suggestions.length > 0}}" class="suggestions-area">
+        <scroll-view scroll-x="true" class="suggestions-scroll">
+            <view class="suggestions-list">
+                <view wx:for="{{suggestions}}" wx:key="label" class="suggestion-chip" bindtap="sendSuggestion" data-item="{{JSON.stringify(item)}}">
+                    <text class="chip-icon">{{item.icon}}</text>
+                    <text class="chip-label">{{item.label}}</text>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+
+    <view class="input-area">
+        <view class="input-wrapper">
+            <textarea 
+                class="input-box" 
+                placeholder="说说您的需求或健康问题..." 
+                placeholder-class="input-placeholder" 
+                value="{{inputValue}}" 
+                bindinput="onInputChange" 
+                bindlinechange="onInputHeightChange" 
+                confirm-type="send" 
+                bindconfirm="sendMessage" 
+                style="height: {{inputHeight}}px" 
+                maxlength="500"
+                auto-height="{{true}}"
+                fixed="{{true}}"
+            ></textarea>
+            
+            <view 
+                class="send-btn {{!inputValue || isLoading ? 'disabled' : ''}}" 
+                bindtap="sendMessage"
+                style="height: {{inputHeight}}px;"
+            >
+                <text>{{isLoading ? '等待' : '发送'}}</text>
+            </view>
+        </view>
+    </view>
+</view>
