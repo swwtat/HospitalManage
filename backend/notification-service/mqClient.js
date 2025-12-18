@@ -9,6 +9,15 @@ let channel = null;
 async function connect() {
   if (channel && connection) return { connection, channel };
   connection = await amqp.connect(MQ_URL);
+  // attach handlers so that connection loss clears cached objects
+  connection.on('error', (err) => {
+    console.warn('AMQP connection error:', err && err.message);
+  });
+  connection.on('close', () => {
+    console.warn('AMQP connection closed, will need to reconnect');
+    channel = null;
+    connection = null;
+  });
   channel = await connection.createChannel();
   await channel.assertExchange(EXCHANGE, 'topic', { durable: true });
   return { connection, channel };
