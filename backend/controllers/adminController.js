@@ -205,7 +205,7 @@ exports.departmentsTree = async (req, res) => {
 exports.scheduleCalendar = async (req, res) => {
   try {
     const month = req.query.month; // YYYY-MM
-    const data = await adminService.scheduleCalendar(month);
+    const data = await adminService.scheduleCalendarDetailed(month);
     res.json({ success: true, data });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 };

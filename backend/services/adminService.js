@@ -264,7 +264,8 @@ module.exports = {
   registrationsStats,
   refundRate,
   departmentsTree,
-  scheduleCalendar
+  scheduleCalendar,
+  scheduleCalendarDetailed
 };
 
 // ------------------ Statistics implementations ------------------
@@ -319,4 +320,33 @@ async function scheduleCalendar(month) {
     byDate[r.date].push({ doctor_id: r.doctor_id, slots: r.slots, capacity: Number(r.capacity || 0) });
   });
   return byDate;
+}
+
+// Detailed schedule calendar: date -> slot -> [ doctor info ]
+async function scheduleCalendarDetailed(month) {
+  const m = month || (new Date()).toISOString().slice(0,7);
+  const start = m + '-01';
+  const parts = m.split('-');
+  const y = parseInt(parts[0],10); const mo = parseInt(parts[1],10);
+  const nextMonth = new Date(y, mo, 1).toISOString().slice(0,10);
+  const sql = `SELECT da.id as availability_id, da.date, da.slot, da.capacity, da.doctor_id, d.name as doctor_name, d.title as doctor_title, d.department_id
+               FROM doctor_availability da
+               LEFT JOIN doctors d ON da.doctor_id = d.id
+               WHERE da.date >= ? AND da.date < ?
+               ORDER BY da.date, da.slot`;
+  const [rows] = await db.query(sql, [start, nextMonth]);
+  const byDateSlot = {};
+  for (const r of rows) {
+    if (!byDateSlot[r.date]) byDateSlot[r.date] = {};
+    if (!byDateSlot[r.date][r.slot]) byDateSlot[r.date][r.slot] = [];
+    byDateSlot[r.date][r.slot].push({
+      availability_id: r.availability_id,
+      doctor_id: r.doctor_id,
+      name: r.doctor_name,
+      title: r.doctor_title,
+      department_id: r.department_id,
+      capacity: Number(r.capacity || 0)
+    });
+  }
+  return byDateSlot;
 }

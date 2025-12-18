@@ -112,7 +112,6 @@ onMounted(async () => {
   await loadDeptsTree()
   await loadScheduleCalendar()
   await loadDoctors()
-  await loadAvailabilities()
   renderRegChart()
 })
 
@@ -218,7 +217,7 @@ function buildCalendar(yearMonth) {
 
 async function loadScheduleCalendar() {
   const res = await api('/api/admin/stats/schedule-calendar?month=' + month.value)
-  availability.value = (res && res.success) ? res.data : {}
+  availByDateSlot.value = (res && res.success) ? res.data : {}
   buildCalendar(month.value)
 }
 
